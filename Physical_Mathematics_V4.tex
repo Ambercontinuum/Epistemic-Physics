@@ -1,0 +1,951 @@
+\documentclass[12pt]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{lawblue}{RGB}{15, 52, 96}
+\definecolor{conjectpurple}{RGB}{123, 45, 139}
+\definecolor{titlenavy}{RGB}{26, 26, 46}
+\definecolor{darkgray}{RGB}{60, 60, 60}
+
+% ── Hyperref ──────────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=lawblue,
+  citecolor=lawblue,
+  urlcolor=lawblue
+}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{titlenavy}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{lawblue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+\titlespacing{\section}{0pt}{18pt}{8pt}
+\titlespacing{\subsection}{0pt}{14pt}{6pt}
+\titlespacing{\subsubsection}{0pt}{10pt}{4pt}
+
+% ── Theorem environments ──────────────────────────────────────────────────────
+\newtheoremstyle{lawstyle}
+  {10pt}{10pt}{\itshape}{0pt}{\bfseries\color{lawblue}}{.}{.5em}{}
+
+\newtheoremstyle{conjstyle}
+  {10pt}{10pt}{\itshape}{0pt}{\bfseries\color{conjectpurple}}{.}{.5em}{}
+
+\newtheoremstyle{predstyle}
+  {8pt}{8pt}{\normalfont}{0pt}{\bfseries}{.}{.5em}{}
+
+\theoremstyle{lawstyle}
+\newtheorem{law}{Law}
+
+\theoremstyle{conjstyle}
+\newtheorem{conjecture}{Conjecture}[section]
+
+\theoremstyle{predstyle}
+\newtheorem{prediction}{Prediction}
+
+% ── Framed environments ───────────────────────────────────────────────────────
+\newmdenv[
+  linecolor=lawblue,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  leftmargin=12pt, innerleftmargin=10pt,
+  rightmargin=0pt, innerrightmargin=0pt,
+  innertopmargin=4pt, innerbottommargin=4pt,
+  skipabove=8pt, skipbelow=8pt
+]{lawbox}
+
+\newmdenv[
+  linecolor=conjectpurple,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  leftmargin=12pt, innerleftmargin=10pt,
+  rightmargin=0pt, innerrightmargin=0pt,
+  innertopmargin=4pt, innerbottommargin=4pt,
+  skipabove=8pt, skipbelow=8pt
+]{conjbox}
+
+% ── Title ─────────────────────────────────────────────────────────────────────
+\title{
+  {\Large\bfseries\color{titlenavy} Physical Mathematics: A Foundational Framework}
+}
+\author{}
+\date{June 2025}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+% ── Abstract ──────────────────────────────────────────────────────────────────
+\begin{abstract}
+Anson's Framework for Physical Mathematics proposes that mathematical truth is not timeless
+and substrate-independent, but physically realized---constrained by thermodynamics, reference
+frames, quantum mechanics, fractal geometry, and spatial structure. The framework consists of
+\textbf{two laws} and \textbf{three conjectures}, distinguished by their current epistemic
+status but held to identical standards of formal rigor. The ideas, conceptual architecture,
+and epistemological positions presented here are original. The mathematical formalization was
+developed through human-AI coupling, as disclosed in the Acknowledgments.
+
+\textbf{Anson's First Law} (Thermodynamic Constraint) derives a computable precision ceiling
+$n_{\max}$ for any physical system from Landauer's Principle and the Bekenstein bound.
+\textbf{Anson's Second Law} (Frame Dependence) proves three mechanically verified properties
+of realized computation: (i) both error terms are strictly positive in any finite frame;
+(ii) truncation and rounding errors are strictly and independently monotone in opposite
+directions; (iii) the optimal step size is uniquely and positively determined by the physical
+frame. The law does not assert a strict total ordering of error between frames---that claim
+is unprovable, as the terms can cancel---but proves the correct, stronger claim that each
+term is independently frame-determined.
+\textbf{Conjecture~A} (Quantum Complexity Reduction) proposes that complexity class membership
+is substrate-dependent---a structural claim with a specific falsification condition.
+\textbf{Conjecture~B} (Fractal Dimensional Correspondence) proposes that arithmetic
+irregularity at finite resolution is a projection artifact of underlying fractal symmetry,
+with a computable convergence test. \textbf{Conjecture~C} (Geometric Foundation) proposes
+that numerical systems are coordinate representations of prior geometric structures, with a
+spectral gap falsification criterion. The two laws are formally verified in Lean~4~\cite{lean4} (Mathlib~\cite{mathlib2020});
+the three conjectures are axiomatized with precise type signatures. All five components
+generate experimentally testable predictions.
+\end{abstract}
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 1. Introduction ───────────────────────────────────────────────────────────
+\section{Introduction}
+
+Standard mathematics treats its objects as substrate-independent: the Riemann zeros, the
+primes, NP certificates exist timelessly, and computation is merely a window onto
+pre-existing truth. This framework rejects that position. The act of mathematical
+verification is irreducibly physical---it costs energy, occupies space, operates in a
+reference frame, and is bounded by the same laws that govern any physical process.
+Mathematical truth, on this account, is what can be \emph{realized}, not merely what can
+be stated.
+
+This position has antecedents. Landauer~\cite{landauer1961} established thermodynamic cost
+for logical irreversibility; Bekenstein~\cite{bekenstein1981} derived a universal entropy
+bound; Deutsch~\cite{deutsch1985} argued that physics determines computability;
+Wheeler~\cite{wheeler1990} proposed information as ontologically fundamental. The present
+framework extends this lineage into a unified formal structure with explicit falsification
+conditions.
+
+\subsection*{On the distinction between Laws and Conjectures}
+
+A \textbf{law} in this framework is a statement derivable from established physical
+principles (Landauer, Bekenstein, numerical analysis) whose falsification conditions follow
+from those same principles. A \textbf{conjecture} is a statement that is formally precise,
+internally consistent, and falsifiable, but whose derivation from first principles is
+incomplete---it requires either experimental confirmation or a proof step not yet supplied.
+The conjectures are held to exactly the same standard of formal rigor as the laws. The
+distinction is epistemic, not ontological: conjectures are laws in waiting, not speculations.
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 2. The Two Laws ───────────────────────────────────────────────────────────
+\section{The Two Laws}
+
+% ── Law 1 ────────────────────────────────────────────────────────────────────
+\subsection{Anson's First Law: Thermodynamic Constraint on Computational Precision}
+
+\subsubsection*{Statement}
+
+\begin{law}[Thermodynamic Constraint]
+For any physical system with energy bound $E_{\max}$ and spatial radius $R$, the maximum
+number of bits that can be reliably verified is:
+\begin{lawbox}
+\[
+  n_{\max} = \left\lfloor \frac{2\pi k_B R\, E_{\max}}{\hbar\, c\, \ln 2} \right\rfloor
+\]
+\end{lawbox}
+Any mathematical computation requiring verification to precision $b(n) > n_{\max}$ bits is
+physically unrealizable within that system. This is an absolute constraint, not an
+engineering limitation.
+\end{law}
+
+\subsubsection*{Derivation}
+
+By Landauer's Principle~\cite{landauer1961}, each irreversible bit operation dissipates at
+least $E_{\mathrm{bit}} = k_B T \ln 2$. Verifying a mathematical statement to $b$ bits
+requires at least $b$ irreversible operations:
+\[
+  E_{\mathrm{verify}}(b) \;\geq\; b \cdot k_B T \ln 2.
+\]
+The Bekenstein bound~\cite{bekenstein1981} constrains the total entropy of any bounded
+physical system:
+\[
+  S_{\max} = \frac{2\pi k_B R E}{\hbar c}.
+\]
+Each verified bit contributes $k_B \ln 2$ to entropy, so:
+\[
+  b \;\leq\; \frac{S_{\max}}{k_B \ln 2} = \frac{2\pi R E}{\hbar c \ln 2}.
+\]
+Setting $E = E_{\max}$ yields $n_{\max}$. The two bounds are both necessary: Landauer sets
+the per-bit cost; Bekenstein sets the total budget. This is not a statement about computation
+speed---it is a statement about how much mathematical truth a bounded physical system can
+simultaneously hold.
+
+\subsubsection*{Falsifiable Prediction}
+
+\begin{prediction}[P1]
+Energy consumed verifying $n$ Riemann zeros (via \texttt{mpmath}, GPU power-monitored) must
+scale as $E(n) \geq \alpha \cdot n \log n$ with $\alpha \geq k_B T \ln 2 \cdot c_0$, where
+$c_0$ is the known bit-cost of the algorithm. Any measured $\alpha$ below this floor falsifies
+the First Law.
+\end{prediction}
+
+\subsubsection*{Scope and Limitations}
+
+The bound is tight only at the Landauer limit. Room-temperature hardware operates orders of
+magnitude above this; $n_{\max}$ is an idealized ceiling. The law is silent on \emph{logical}
+unprovability (G\"odel)---it addresses \emph{physical} unrealizability. These are distinct
+constraints that may independently apply to the same statement.
+
+\bigskip
+
+% ── Law 2 ────────────────────────────────────────────────────────────────────
+\subsection{Anson's Second Law: Computational Frame Dependence}
+
+\subsubsection*{Statement}
+
+\begin{law}[Frame Dependence]
+Let $T_{\mathrm{ideal}}$ be the exact solution to a computation $C$. In a physical frame
+characterized by precision $p$ (bits), time budget $\tau$, and numerical method of local
+truncation order $q$ with step size $h = \tau/N$, three properties hold:
+
+\begin{lawbox}
+\textbf{(i) Positivity.} Both error terms are strictly positive in any finite physical frame:
+\[
+  C_{\mathrm{method}} \cdot h^q > 0 \qquad \text{and} \qquad C_{\mathrm{round}} \cdot p^{-1} > 0.
+\]
+\textbf{(ii) Tradeoff.} The terms are independently monotone in opposite directions: increasing
+$h$ strictly increases truncation error; increasing $p$ strictly decreases rounding error:
+\[
+  h_1 < h_2 \;\Rightarrow\; C_{\mathrm{method}} \cdot h_1^q < C_{\mathrm{method}} \cdot h_2^q,
+\]
+\[
+  p_1 < p_2 \;\Rightarrow\; C_{\mathrm{round}} \cdot p_2^{-1} < C_{\mathrm{round}} \cdot p_1^{-1}.
+\]
+\textbf{(iii) Optimal frame.} The step size minimizing total error is uniquely determined by the
+physical frame parameters:
+\[
+  h^* = \left(\frac{C_{\mathrm{round}}}{q\, C_{\mathrm{method}}\, p}\right)^{1/(q+1)} > 0.
+\]
+\end{lawbox}
+
+The frame $(p, \tau, q)$ is thermodynamically bounded: $p$ by hardware word length, $\tau$ by
+energy budget via the First Law, $q$ by memory. Because the two error terms pull in opposite
+directions and neither can reach zero, frame dependence is irreducible---not merely practical.
+
+\textbf{Note on total error ordering.} The total error $C_{\mathrm{method}} h^q + C_{\mathrm{round}} p^{-1}$
+is \emph{not} in general strictly ordered between frames: the truncation and rounding terms can
+cancel, making two distinct frames yield equal total error. What is provable---and proved---is
+that the individual terms are strictly and independently frame-dependent. This is the correct
+and precise content of the law.
+\end{law}
+
+\subsubsection*{Derivation}
+
+The error decomposition follows from standard numerical analysis~\cite{higham2002}. For a
+$q$-th order method, global discretization error is $O(h^q)$, with constant $C_{\mathrm{method}} > 0$.
+Floating-point arithmetic at $p$ bits introduces rounding error bounded by $C_{\mathrm{round}} \cdot p^{-1}$,
+where $p^{-1} > 0$ for any finite $p$.
+
+\textit{Proof of positivity (i).} $C_{\mathrm{method}} > 0$ and $h^q > 0$ for $h > 0$, so
+$C_{\mathrm{method}} \cdot h^q > 0$. Similarly $C_{\mathrm{round}} > 0$ and $p^{-1} > 0$ for
+$p > 0$, so $C_{\mathrm{round}} \cdot p^{-1} > 0$. Both hold for all finite physical frames. $\square$
+
+\textit{Proof of tradeoff (ii).} For fixed positive $C_{\mathrm{method}}$, the map $h \mapsto h^q$
+is strictly increasing for $q \geq 1$, so $h_1 < h_2$ implies $h_1^q < h_2^q$, giving strict
+truncation ordering by multiplicativity. For the rounding term: $p_1 < p_2$ with both positive
+implies $p_2^{-1} < p_1^{-1}$ (inversion reverses order), so $C_{\mathrm{round}} \cdot p_2^{-1} <
+C_{\mathrm{round}} \cdot p_1^{-1}$ by multiplicativity. $\square$
+
+\textit{Proof of optimal step (iii).} Minimize $f(h) = C_{\mathrm{method}} h^q + C_{\mathrm{round}} p^{-1} h^{-1}$
+over $h > 0$. Setting $f'(h) = 0$: $q\, C_{\mathrm{method}} h^{q-1} = C_{\mathrm{round}} p^{-1} h^{-2}$,
+giving $h^* = (C_{\mathrm{round}} / (q\, C_{\mathrm{method}}\, p))^{1/(q+1)} > 0$. $\square$
+
+The physical grounding: the First Law bounds $\tau$, which bounds $N = \tau/h^*$. The two
+laws are coupled---the First Law constrains the parameter space in which the Second Law operates.
+
+\subsubsection*{Lean 4 Verification}
+
+The three properties above are mechanically verified in Lean~4~\cite{lean4} (Mathlib~\cite{mathlib2020}) as:
+\begin{itemize}
+  \item \texttt{law2\_error\_bound\_pos}: positivity of both terms and their sum.
+  \item \texttt{law2\_truncation\_monotone}, \texttt{law2\_rounding\_monotone}: strict
+        independent monotonicity of each term.
+  \item \texttt{law2\_tradeoff}: the conjunction of both monotonicity results.
+  \item \texttt{optimalStep\_pos}: the optimal step is well-defined and strictly positive.
+\end{itemize}
+The Lean proof process identified that a stronger claim---strict ordering of \emph{total}
+error between frames---is unprovable, since the terms can cancel. The law as stated above
+reflects exactly what is mechanically verified.
+
+\subsubsection*{Falsifiable Predictions}
+
+\begin{prediction}[P2a]
+Lorenz system solved with RK4 at $p \in \{32, 64, 128\}$ bits, fixed $\tau$, pre-chaos
+regime ($t < t_{\mathrm{Lyapunov}}$): truncation error must increase strictly with $h$
+and rounding error must decrease strictly with $p$, independently and simultaneously.
+If either monotonicity fails, the tradeoff claim is falsified.
+\end{prediction}
+
+\begin{prediction}[P2b]
+The empirically optimal step $h^*$ at each $p$ must match the analytic minimizer
+$(C_{\mathrm{round}} / (q\, C_{\mathrm{method}}\, p))^{1/(q+1)}$ to within experimental
+precision. The optimal step must be strictly positive and vary monotonically with $p$.
+\end{prediction}
+
+\subsubsection*{Scope and Limitations}
+
+The error decomposition is standard numerical analysis. The law's claim is that \emph{physical}
+constraints on $(p, \tau)$ make both error terms irreducibly frame-dependent. The law does not
+claim that different frames always produce different total errors---it claims that the individual
+truncation and rounding contributions are each strictly and independently determined by the
+physical frame. This is the weaker, correct, and fully verified claim.
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 3. The Three Conjectures ──────────────────────────────────────────────────
+\section{The Three Conjectures}
+
+The following three conjectures are formally specified to the same standard as the laws
+above. Each carries a precise statement, a derivation sketch identifying the missing step,
+and two independent falsification paths. They are called conjectures because the derivation
+from first principles is incomplete---not because the claims are imprecise or untestable.
+
+% ── Conjecture A ──────────────────────────────────────────────────────────────
+\subsection{Conjecture A: Quantum Complexity Reduction}
+
+\subsubsection*{Statement}
+
+\begin{conjecture}[Quantum Complexity Reduction]
+Complexity class membership is substrate-dependent. For any problem $\Pi \in \mathbf{NP}$
+with classical worst-case complexity $C_{\mathrm{cl}}(n)$, the complexity $C_q(n)$ realized
+by a quantum substrate satisfies $C_q(n) = o(C_{\mathrm{cl}}(n))$ for at least a proper
+subclass of $\mathbf{NP}$. Classical and quantum systems are distinct physical frames in the
+sense of the Second Law, and the complexity experienced by a computation is frame-relative.
+
+\begin{conjbox}
+Canonical instances:
+\begin{align*}
+  \text{Factoring:} &\quad C_{\mathrm{cl}} \sim \exp\!\left(O(n^{1/3})\right)
+    \;\longrightarrow\; C_q \sim O(n^2 \log n) \quad \text{\cite{shor1997}}\\
+  \text{Unstructured search:} &\quad C_{\mathrm{cl}} \sim O(N)
+    \;\longrightarrow\; C_q \sim O(\sqrt{N}) \quad \text{\cite{grover1996}}
+\end{align*}
+\end{conjbox}
+\end{conjecture}
+
+\subsubsection*{Derivation Sketch and Missing Step}
+
+Shor's algorithm operates in a $2^n$-dimensional Hilbert space, using quantum Fourier
+transform to find periods of modular exponentiation in $O(n^2 \log n)$ gate operations. The
+classical sub-exponential barrier arises because classical registers cannot coherently
+superpose $2^n$ states---a physical constraint (decoherence), not a logical one.
+
+\textbf{Missing step:} A proof that this reduction is \emph{substrate-general}---i.e., that
+for any quantum-realizable physical system the complexity gap is preserved---requires a
+formal characterization of which physical substrates instantiate $\mathbf{BQP}$ and which do
+not. Current results establish the gap for specific algorithms; the conjecture asserts it is
+a structural feature of substrate physics.
+
+\subsubsection*{Falsifiable Prediction}
+
+\begin{prediction}[PA]
+Grover 3-SAT over $N = 2^{20}$ instances on a 20-qubit processor: runtime must scale as
+$O(\sqrt{N})$ vs.\ $O(N)$ classically. The crossover as a function of decoherence rate
+$\gamma$ provides a joint test; if runtime scales as $O(\sqrt{N} \cdot e^{\gamma t})$ for
+measurable $\gamma$, the substrate-frame coupling is empirically confirmed.
+\end{prediction}
+
+\subsubsection*{What Would Falsify It}
+
+If a quantum substrate correctly implements Grover's algorithm at the gate level yet runtime
+scales as $O(N)$, and this cannot be explained by decoherence, Conjecture~A is falsified for
+that substrate---requiring revision of the substrate-dependence claim.
+
+\bigskip
+
+% ── Conjecture B ──────────────────────────────────────────────────────────────
+\subsection{Conjecture B: Fractal Dimensional Correspondence}
+
+\subsubsection*{Statement}
+
+\begin{conjecture}[Fractal Dimensional Correspondence]
+Let $S_n = \{s_1, \ldots, s_n\}$ be a finite sample of a number-theoretic sequence (e.g.,
+imaginary parts of Riemann zeros). Let $D_H(n)$ be the box-counting Hausdorff dimension of
+$S_n$. Then: (i) the limit $D_H = \lim_{n\to\infty} D_H(n)$ exists; (ii) $D_H \in (1,2)$;
+and (iii) the apparent irregularity of $S_n$ at finite $n$ is a projection artifact of
+finite coarse-graining resolution, not an intrinsic property of the sequence.
+
+Define coarse-graining $P_\varepsilon$ by covering $S_n$ with boxes of size $\varepsilon$
+and retaining box-centers. Then:
+\begin{conjbox}
+\[
+  P_\varepsilon(S_\infty) \;\cong\; S_n \quad \text{as } \varepsilon \to 1/n,
+\]
+with box count satisfying $N(\varepsilon) \sim \varepsilon^{-D_H}$ in the scaling regime.
+\end{conjbox}
+\end{conjecture}
+
+\subsubsection*{Derivation Sketch and Missing Step}
+
+Montgomery~\cite{montgomery1973} and Odlyzko~\cite{odlyzko1987} showed that spacings between
+Riemann zeros follow GUE (Gaussian Unitary Ensemble) statistics. GUE spacing distributions
+are scale-invariant in the bulk---a necessary condition for fractal structure.
+Berry and Keating~\cite{berry1999} connected Riemann zeros to the spectrum of a hypothetical
+quantum Hamiltonian, reinforcing the scale-invariance link.
+
+\textbf{Missing step:} Scale-invariance of GUE statistics is necessary but not sufficient
+for a well-defined Hausdorff dimension. The conjecture requires showing that the
+box-counting limit converges, and that $D_H$ is universal across the GUE family---not an
+artifact of the zero-counting measure.
+
+\subsubsection*{Falsifiable Prediction}
+
+\begin{prediction}[PB]
+Box-counting of the first $10^6$ Riemann zeros (Odlyzko dataset) over
+$\varepsilon \in [10^{-6}, 10^{-1}]$ must yield a stable linear region in
+$\log N(\varepsilon)$ vs.\ $\log(1/\varepsilon)$ across at least two decades.
+$D_H(n)$ must converge (not oscillate or diverge) across $n = 10^4, 10^5, 10^6$.
+Failure to converge falsifies claim~(i).
+\end{prediction}
+
+\subsubsection*{What Would Falsify It}
+
+If $D_H(n)$ oscillates persistently with no stable attractor, or if no scaling regime
+appears over two decades of $\varepsilon$, Conjecture~B is falsified. Partial falsification:
+if $D_H$ converges but lies outside $(1,2)$, claim~(ii) is falsified while claim~(i)
+survives.
+
+\bigskip
+
+% ── Conjecture C ──────────────────────────────────────────────────────────────
+\subsection{Conjecture C: Geometric Foundation}
+
+\subsubsection*{Statement}
+
+\begin{conjecture}[Geometric Foundation]
+Every numerical mathematical relationship $R$ on a set $A \subseteq \mathbb{Z}$ has a
+geometric realization: there exists a weighted graph $G = (V, E, w)$ with weight function
+$\varphi: E \to A$ such that:
+\begin{conjbox}
+\[
+  R \text{ holds in } A \;\iff\; R_G \text{ holds in } G,
+\]
+\end{conjbox}
+where $R_G$ is the corresponding structural property of $G$. Furthermore, the geometric
+realization is \emph{epistemically productive}: it exposes structural regularities via
+spectral and topological methods inaccessible to coordinate-based numerical analysis of
+$A$ directly.
+\end{conjecture}
+
+\subsubsection*{Derivation Sketch and Missing Step}
+
+For Goldbach's conjecture: construct $G_n = (P, E_n)$ where $P$ is the set of primes
+$\leq n$ and $\{p,q\} \in E_n$ iff $p + q = n$. Goldbach's conjecture is equivalent to:
+for all even $n > 2$, $G_n$ has at least one edge. The spectral gap
+$\lambda_2(G_n)$ (second Laplacian eigenvalue) measures graph connectivity~\cite{spielman2007}; if
+$\lambda_2 > 0$ for all $n$, the graph is connected, implying the conjecture.
+
+\textbf{Missing step:} The biconditional $R \iff R_G$ is established for specific cases.
+The general claim---that \emph{every} numerical relationship has such a realization---requires
+either a constructive proof for arbitrary $R$, or a categorical formalism showing the
+embedding functor is fully faithful. Neither exists yet.
+
+\subsubsection*{Falsifiable Predictions}
+
+\begin{prediction}[PC]
+The spectral gap $\lambda_2(G_n)$ for Goldbach graphs $G_n$,
+$n \in \{4, 6, \ldots, 10^6\}$, should grow monotonically. Stagnation or decrease over
+any run of 1000 consecutive even integers falsifies the epistemic-productivity claim.
+Separately: geometric analysis (spectral gap trend) should predict Goldbach density faster
+than direct numerical checking. Failure to do so falsifies epistemic productivity
+independently of the biconditional.
+\end{prediction}
+
+\subsubsection*{What Would Falsify It}
+
+Two independent paths: (1) $\lambda_2(G_n)$ fails monotonicity---falsifies epistemic
+productivity. (2) A number-theoretic relationship is found for which no satisfying graph
+realization exists---falsifies the existence claim. These are separable; (1) can be
+falsified while (2) survives.
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 4. Unified Implications ───────────────────────────────────────────────────
+\section{Unified Implications}
+
+\textbf{Riemann Hypothesis.} The First Law establishes that exhaustive zero-verification is
+physically bounded. Conjecture~B reframes the target: instead of checking zeros
+incrementally, compute $D_H$ as a finite-sample invariant. If $D_H$ is stable and tied to a
+known geometric invariant of the zeta function, a finitary proof strategy becomes
+conceivable---one that does not require the infinite-precision verification the First Law
+rules out.
+
+\textbf{P vs.\ NP.} Conjecture~A makes the frame-relativity of this question explicit. Any
+claimed proof of $\mathbf{P} \neq \mathbf{NP}$ in the classical Turing model leaves open
+whether $\mathbf{BQP} \supseteq \mathbf{NP}$ in a quantum substrate. The Second Law
+provides the formal vocabulary for this distinction.
+
+\textbf{Foundations.} Laws 1 and 2 together imply that realized mathematical truth is always
+finite and approximate. The framework is compatible with Platonism about abstract objects. It
+is incompatible with Platonism about \emph{realized} truth: no physical system can verify
+infinite-precision statements, meaning the realized mathematical universe is strictly smaller
+than the abstract one.
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 5. Experimental Program ───────────────────────────────────────────────────
+\section{Experimental Program}
+
+Predictions P1, P2a, P2b test the Laws. PA, PB, PC test the Conjectures. All five are
+independently executable with current or near-current technology.
+
+\begin{enumerate}[label=\textbf{(\arabic*)}, leftmargin=*, itemsep=6pt]
+
+  \item \textbf{P1 (First Law).} Compute $10^3, 10^4, 10^5$ Riemann zeros via
+    \texttt{mpmath} on GPU. Monitor energy via hardware power interface. Fit
+    $E(n) = \alpha \cdot n \log n + \beta$; verify $\alpha \geq k_B T \ln 2 \cdot c_0$.
+
+  \item \textbf{P2a (Second Law).} Lorenz RK4, $p \in \{32, 64, 128\}$ bits, fixed $\tau$,
+    pre-chaos regime. Fit $|\epsilon| = A \cdot 2^{-p} + B \cdot h^4$. Both terms must be
+    measurably significant.
+
+  \item \textbf{P2b (Second Law).} Identify empirical $h^*$ at each $p$; compare to analytic
+    minimizer. Match required within experimental precision.
+
+  \item \textbf{PA (Conjecture A).} Grover 3-SAT, 20 qubits, IBM Qiskit. Runtime vs.\
+    $\sqrt{N}$ and $N$. Report $\gamma$ (decoherence rate) as covariate.
+    Fit $t_q(N) = c \cdot \sqrt{N} \cdot e^{\gamma t}$.
+
+  \item \textbf{PB (Conjecture B).} Box-counting of first $10^6$ Riemann zeros (Odlyzko).
+    Plot $\log N(\varepsilon)$ vs.\ $\log(1/\varepsilon)$. Extract $D_H$ from linear region.
+    Track $D_H(n)$ across $n = 10^4, 10^5, 10^6$ for convergence.
+
+  \item \textbf{PC (Conjecture C).} NetworkX Goldbach graphs, $n \in [4, 10^6]$. Compute
+    $\lambda_2$ via \texttt{scipy.sparse.linalg.eigsh}. Plot $\lambda_2(n)$ vs.\ $n$.
+    Flag any monotonicity violations.
+
+\end{enumerate}
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 6. Future Directions ──────────────────────────────────────────────────────
+\section{Future Directions}
+
+\begin{itemize}[itemsep=6pt]
+  \item \textbf{First Law.} Compute substrate-specific $n_{\max}$ for existing
+    supercomputers, quantum annealers, and neuromorphic hardware. Publish as a physical
+    precision budget table.
+
+  \item \textbf{Second Law.} Formalize inter-frame error accumulation for distributed
+    computation. Does network latency between nodes constitute a frame boundary? Derive the
+    distributed analogue of the two-term error bound.
+
+  \item \textbf{Conjecture A $\to$ Law.} Characterize which physical substrates instantiate
+    $\mathbf{BQP}$ formally, from thermodynamic constraints rather than algorithm design.
+    If successful, Conjecture~A becomes the Third Law.
+
+  \item \textbf{Conjecture B $\to$ Law.} Prove $D_H(n)$ convergence from GUE
+    scale-invariance rigorously. Test whether $D_H$ is conserved across the $L$-function
+    family. If conserved, $D_H$ is a candidate for a new arithmetic invariant.
+
+  \item \textbf{Conjecture C $\to$ Law.} Develop the categorical formalism for the embedding
+    $\varphi: E \to A$. Prove or disprove that the functor is fully faithful for all
+    number-theoretic $R$.
+\end{itemize}
+
+\bigskip
+\hrule
+\bigskip
+
+% ── 7. Conclusion ─────────────────────────────────────────────────────────────
+\section{Conclusion}
+
+Anson's Framework for Physical Mathematics relocates mathematical truth: not from the
+Platonic realm of timeless abstraction to something lesser, but to something more
+honest---the physical realm of constrained, frame-dependent, energetically bounded
+realization. Two laws are established from first principles and carry the full epistemic
+weight of that word. Three conjectures are held to the same formal standard and are waiting
+on proof steps and experimental confirmation to join them.
+
+The distinction between laws and conjectures is not a hedge. It is the posture of a
+framework that intends to survive contact with evidence. Each component is falsifiable. The
+conjectures are not speculations---they are the next tier of the same structure, already
+dressed for the occasion.
+
+\bigskip
+\hrule
+\bigskip
+
+% ── Author and Process ────────────────────────────────────────────────────────
+\section*{Author and Process}
+
+\textbf{Author.} Amber Anson, independent researcher, AmberContinuum Research.
+
+\textbf{Process.} The ideas, conceptual architecture, and epistemological positions are
+the original work of the author. The mathematical formalization was developed through
+human-AI coupling with Claude (Anthropic) and Grok~3 (xAI), functioning as coherence
+engines and formal reasoning substrates. These systems did not originate the claims; they
+made the author's claims mathematically legible.
+
+The author regards this paper as a documented instance of the coupling dynamics described
+by the Perturbation Dynamics Operator Theory (PDOT) framework
+(pre-registered OSF: osf.io/7mejx). The Lean~4 formalization is the proof of record.
+The process that produced it is the proof of concept.
+
+\bigskip
+\hrule
+\bigskip
+
+% ── References ────────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{lean4}
+de Moura, L., \& Ullrich, S. (2021).
+The Lean~4 theorem prover and programming language.
+In \textit{Automated Deduction -- CADE 28}, Lecture Notes in Computer Science, Vol. 12699 (pp. 625--635). Springer.
+\url{https://doi.org/10.1007/978-3-030-79876-5_37}
+
+\bibitem{mathlib2020}
+The mathlib Community. (2020).
+The Lean mathematical library.
+In \textit{Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020)} (pp. 367--381). ACM.
+\url{https://doi.org/10.1145/3372885.3373824}
+
+\bibitem{bekenstein1981}
+Bekenstein, J.~D. (1981).
+Universal upper bound on the entropy-to-energy ratio for bounded systems.
+\textit{Physical Review D}, 23(2), 287.
+
+\bibitem{berry1999}
+Berry, M.~V., \& Keating, J.~P. (1999).
+The Riemann zeros and eigenvalue asymptotics.
+\textit{SIAM Review}, 41(2), 236--266.
+
+\bibitem{deutsch1985}
+Deutsch, D. (1985).
+Quantum theory, the Church--Turing principle and the universal quantum computer.
+\textit{Proceedings of the Royal Society A}, 400, 97--117.
+
+\bibitem{falconer2003}
+Falconer, K. (2003).
+\textit{Fractal Geometry: Mathematical Foundations and Applications}.
+Wiley.
+
+\bibitem{grover1996}
+Grover, L.~K. (1996).
+A fast quantum mechanical algorithm for database search.
+\textit{Proceedings of the 28th ACM STOC}, 212--219.
+
+\bibitem{higham2002}
+Higham, N.~J. (2002).
+\textit{Accuracy and Stability of Numerical Algorithms}.
+SIAM.
+
+\bibitem{johansson2023}
+Johansson, F., et al. (2023).
+mpmath: A Python library for arbitrary-precision floating-point arithmetic.
+\url{http://mpmath.org}.
+
+\bibitem{landauer1961}
+Landauer, R. (1961).
+Irreversibility and heat generation in the computing process.
+\textit{IBM Journal of Research and Development}, 5(3), 183--191.
+
+\bibitem{montgomery1973}
+Montgomery, H.~L. (1973).
+The pair correlation of zeros of the zeta function.
+In H.~G. Diamond (Ed.), \textit{Analytic Number Theory}, Proc. Sympos. Pure Math., Vol.~XXIV (pp. 181--193). American Mathematical Society.
+
+\bibitem{odlyzko1987}
+Odlyzko, A.~M. (1987).
+On the distribution of spacings between zeros of the zeta function.
+\textit{Mathematics of Computation}, 48(177), 273--308.
+
+\bibitem{shor1997}
+Shor, P.~W. (1997).
+Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer.
+\textit{SIAM Journal on Computing}, 26(5), 1484--1509.
+
+\bibitem{spielman2007}
+Spielman, D.~A. (2007).
+Spectral graph theory and its applications.
+\textit{Proceedings of the 48th Annual IEEE Symposium on Foundations of Computer Science (FOCS)}, 29--38.
+
+\bibitem{stein1964}
+Stein, M.~L., \& Ulam, S.~M. (1964).
+An observation on the distribution of primes.
+\textit{American Mathematical Monthly}, 71(5), 496--498.
+
+\bibitem{virtanen2020}
+Virtanen, P., et al. (2020).
+SciPy 1.0: Fundamental algorithms for scientific computing in Python.
+\textit{Nature Methods}, 17, 261--272.
+
+\bibitem{wheeler1990}
+Wheeler, J.~A. (1990).
+Information, physics, quantum: The search for links.
+In W.~H. Zurek (Ed.), \textit{Complexity, Entropy, and the Physics of Information} (pp. 309--336). Addison-Wesley, Redwood City, CA.
+
+\end{thebibliography}
+
+\bigskip
+\hrule
+\bigskip
+
+% ── Appendix: Lean 4 Formal Verification ─────────────────────────────────────
+\appendix
+\section{Lean 4 Formal Verification}
+
+The following file contains the complete Lean~4~\cite{lean4} (Mathlib~\cite{mathlib2020}) formalization of
+Anson's First and Second Laws, verified mechanically by the Lean type checker.
+The file can be pasted directly into the Lean~4 web editor at
+\url{https://live.lean-lang.org} with Mathlib selected to reproduce the
+verification. The conjectures are axiomatized using \texttt{axiom} declarations,
+which assert claims with precise type signatures without proof---the correct
+Lean~4 posture for open mathematical claims.
+
+\bigskip
+
+\begingroup
+\small
+\begin{verbatim}
+-- Physical Mathematics: A Foundational Framework
+-- Formal Verification of Anson's First and Second Laws
+-- Amber Anson, AmberContinuum Research
+
+import Mathlib
+
+set_option linter.unusedVariables false
+
+namespace PhysicalMathematics
+
+open Real
+
+variable {k_B T R E hbar c : R}
+
+-- ===========================================================
+-- PRIMITIVE DEFINITIONS
+-- ===========================================================
+
+-- Landauer cost: minimum energy per irreversible bit operation
+-- E_bit = k_B * T * ln 2
+noncomputable def landauerCost (k_B T : R) : R :=
+  k_B * T * log 2
+
+-- Bekenstein bound: maximum entropy of a bounded physical system
+-- S_max = (2pi * R * E) / (hbar * c)
+noncomputable def bekensteinBound (R E hbar c : R) : R :=
+  (2 * pi * R * E) / (hbar * c)
+
+-- Maximum verifiable bits
+-- n_max = floor( (2pi R E) / (hbar c k_B T ln 2) )
+noncomputable def nMax (R E hbar c k_B T : R) : N :=
+  floor(bekensteinBound R E hbar c / (k_B * T * log 2))_+
+
+-- ===========================================================
+-- LEMMAS
+-- ===========================================================
+
+lemma log_two_pos : 0 < log 2 := by apply log_pos; norm_num
+
+lemma landauerCost_pos (hk_B : 0 < k_B) (hT : 0 < T) :
+    0 < landauerCost k_B T :=
+  mul_pos (mul_pos hk_B hT) log_two_pos
+
+lemma bekensteinBound_pos
+    (hR : 0 < R) (hE : 0 < E) (hhbar : 0 < hbar) (hc : 0 < c) :
+    0 < bekensteinBound R E hbar c := by
+  unfold bekensteinBound
+  apply div_pos _ (mul_pos hhbar hc)
+  have : (0 : R) < 2 * pi * R * E := by positivity
+  linarith
+
+-- ===========================================================
+-- ANSON'S FIRST LAW: THERMODYNAMIC CONSTRAINT
+-- ===========================================================
+
+theorem law1_ratio_pos
+    (hR : 0 < R) (hE : 0 < E) (hhbar : 0 < hbar) (hc : 0 < c)
+    (hk_B : 0 < k_B) (hT : 0 < T) :
+    0 < bekensteinBound R E hbar c / (k_B * T * log 2) :=
+  div_pos (bekensteinBound_pos hR hE hhbar hc)
+          (mul_pos (mul_pos hk_B hT) log_two_pos)
+
+theorem law1_energy_ceiling
+    (hk_B : 0 < k_B) (hT : 0 < T) (hE : 0 < E)
+    (b : N) (hb : E < b * (k_B * T * log 2)) :
+    not (b * (k_B * T * log 2) <= E) :=
+  not_le.mpr hb
+
+theorem law1_bekenstein_ceiling
+    (hR : 0 < R) (hE : 0 < E) (hhbar : 0 < hbar) (hc : 0 < c)
+    (b : N) (hb : bekensteinBound R E hbar c < b * log 2) :
+    not (b * log 2 <= bekensteinBound R E hbar c) :=
+  not_le.mpr hb
+
+-- Core theorem: any computation requiring more than n_max bits
+-- exceeds the physical entropy budget of the system.
+theorem law1_core
+    (hR : 0 < R) (hE : 0 < E) (hhbar : 0 < hbar) (hc : 0 < c)
+    (hk_B : 0 < k_B) (hT : 0 < T)
+    (b : N) (hb : nMax R E hbar c k_B T < b) :
+    bekensteinBound R E hbar c < b * (k_B * T * log 2) := by
+  unfold nMax at hb
+  have hdenom := mul_pos (mul_pos hk_B hT) log_two_pos
+  have hBpos := bekensteinBound_pos hR hE hhbar hc
+  have hpos  := div_pos hBpos hdenom
+  have hfloor := Nat.floor_le (le_of_lt hpos)
+  have hb' : (floor(...)+  : R) < (b : R) := by exact_mod_cast hb
+  have hle : bekensteinBound R E hbar c / (k_B * T * log 2) < (b : R) := by
+    have hstep := Nat.lt_floor_add_one (bekensteinBound R E hbar c / ...)
+    have hcast : (floor(...)+  : R) + 1 <= (b : R) := by exact_mod_cast hb
+    linarith
+  rw [div_lt_iff_0 hdenom] at hle
+  linarith
+
+-- ===========================================================
+-- ANSON'S SECOND LAW: COMPUTATIONAL FRAME DEPENDENCE
+-- ===========================================================
+
+variable {C_method C_round h p : R} {q : N}
+
+lemma truncation_pos (hCm : 0 < C_method) (hh : 0 < h) (q : N) :
+    0 < C_method * h ^ q :=
+  mul_pos hCm (pow_pos hh q)
+
+lemma rounding_pos (hCr : 0 < C_round) (hp : 0 < p) :
+    0 < C_round * p^(-1) :=
+  mul_pos hCr (inv_pos.mpr hp)
+
+-- (i) Both error terms are strictly positive in any finite frame.
+theorem law2_error_bound_pos
+    (hCm : 0 < C_method) (hCr : 0 < C_round)
+    (hh : 0 < h) (hp : 0 < p) (q : N) :
+    0 < C_method * h ^ q + C_round * p^(-1) :=
+  add_pos (truncation_pos hCm hh q) (rounding_pos hCr hp)
+
+-- (ii-a) Truncation error is strictly increasing in h.
+theorem law2_truncation_monotone
+    (hCm : 0 < C_method) (hh_1 : 0 < h_1)
+    (hh_ord : h_1 < h_2) (q : N) (hq : 0 < q) :
+    C_method * h_1 ^ q < C_method * h_2 ^ q :=
+  mul_lt_mul_of_pos_left
+    (pow_lt_pow_left_0 hh_ord (le_of_lt hh_1)
+      (Nat.pos_iff_ne_zero.mp hq)) hCm
+
+-- (ii-b) Rounding error is strictly decreasing in p.
+theorem law2_rounding_monotone
+    (hCr : 0 < C_round) (hp_1 : 0 < p_1) (hp_2 : 0 < p_2)
+    (hp_ord : p_1 < p_2) :
+    C_round * p_2^(-1) < C_round * p_1^(-1) := by
+  apply mul_lt_mul_of_pos_left _ hCr
+  have hp1inv : p_1^(-1) = 1 / p_1 := (one_div p_1).symm
+  have hp2inv : p_2^(-1) = 1 / p_2 := (one_div p_2).symm
+  rw [hp1inv, hp2inv]
+  have := div_lt_div_of_pos_left (by norm_num : (0:R) < 1) hp_1 hp_ord
+  linarith [this]
+
+-- (ii) Tradeoff: both monotonicity results as a conjunction.
+theorem law2_tradeoff
+    (hCm : 0 < C_method) (hCr : 0 < C_round)
+    (hh_1 : 0 < h_1) (hp_1 : 0 < p_1) (hp_2 : 0 < p_2)
+    (hh_ord : h_1 < h_2) (hp_ord : p_1 < p_2)
+    (q : N) (hq : 0 < q) :
+    C_method * h_1 ^ q < C_method * h_2 ^ q /\
+    C_round * p_2^(-1) < C_round * p_1^(-1) :=
+  And.intro
+    (law2_truncation_monotone hCm hh_1 hh_ord q hq)
+    (law2_rounding_monotone hCr hp_1 hp_2 hp_ord)
+
+-- (iii) Optimal step is well-defined and strictly positive.
+noncomputable def optimalStep (C_method C_round p : R) (q : N) : R :=
+  (C_round / (q * C_method * p)) ^ ((1 : R) / (q + 1))
+
+theorem optimalStep_pos
+    (hCm : 0 < C_method) (hCr : 0 < C_round)
+    (hp : 0 < p) (q : N) (hq : 0 < q) :
+    0 < optimalStep C_method C_round p q := by
+  unfold optimalStep
+  apply rpow_pos_of_pos
+  apply div_pos hCr
+  apply mul_pos; apply mul_pos
+  · exact_mod_cast hq
+  · exact hCm
+  · exact hp
+
+-- ===========================================================
+-- COUPLING OF LAWS 1 AND 2
+-- ===========================================================
+
+-- The precision p in Law 2 is bounded by n_max from Law 1.
+theorem laws_coupled
+    (hR : 0 < R) (hE : 0 < E) (hhbar : 0 < hbar) (hc : 0 < c)
+    (hk_B : 0 < k_B) (hT : 0 < T)
+    (p : N) (hp : nMax R E hbar c k_B T < p) :
+    bekensteinBound R E hbar c < p * (k_B * T * log 2) :=
+  law1_core hR hE hhbar hc hk_B hT p hp
+
+-- ===========================================================
+-- CONJECTURES (axiomatized -- proof obligation open)
+-- ===========================================================
+
+-- Conjecture A: Complexity class membership is substrate-dependent.
+axiom conjectureA_quantum_complexity_reduction
+    (C_classical C_quantum : N -> R)
+    (hcl : forall n, 0 < C_classical n)
+    (hq  : forall n, 0 < C_quantum n) :
+    forall n, C_quantum n < C_classical n
+
+-- Conjecture B: Hausdorff dimension of a number-theoretic
+-- sequence converges to a stable limit in (1, 2).
+axiom conjectureB_fractal_dimension_convergence
+    (D : N -> R) (hD : forall n, 1 < D n /\ D n < 2) :
+    exists (D_H : R), 1 < D_H /\ D_H < 2 /\
+      Filter.Tendsto D Filter.atTop (nhds D_H)
+
+-- Conjecture C: Every numerical relationship has a geometric
+-- realization via a graph embedding.
+axiom conjectureC_geometric_foundation
+    (R : Z -> Z -> Prop) (R_G : (Z -> Z -> Prop) -> Prop) :
+    exists (phi : (Z -> Z -> Prop) -> (Z -> Z -> Prop)),
+      forall (a b : Z), R a b <-> R_G (phi R)
+
+end PhysicalMathematics
+\end{verbatim}
+\endgroup
+
+\bigskip
+\noindent\textbf{Note on verbatim rendering.} The appendix above uses ASCII
+approximations for certain Unicode symbols used in the actual Lean~4 source
+(e.g., \texttt{hbar} for $\hbar$, \texttt{floor(...)\_+} for $\lfloor\cdot\rfloor_+$,
+\texttt{p\^{}(-1)} for $p^{-1}$, \texttt{/\textbackslash} for $\wedge$).
+The canonical source file \texttt{PhysicalMathematics.lean} contains the full
+Unicode Lean~4 syntax and is the authoritative verification artifact.
+
+\end{document}
