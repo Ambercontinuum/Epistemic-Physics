@@ -74,6 +74,21 @@ This is the **Epistemic Collapse Operator**. Truth, meaning, and alignment are a
 
 ---
 
+## Use Cases
+
+Epistemic Physics is designed as a formal reasoning substrate for systems that must determine when an unresolved state has become sufficiently coherent to act on.
+
+- **Auditing threshold decisions** — represent evidence for and against a conclusion explicitly, then verify whether the stated threshold has actually been met.
+- **Comparing models across domains** — translate computational limits, signal resolution, and alignment dynamics into a shared vocabulary without claiming that their physical mechanisms are identical.
+- **AI alignment and agent governance** — specify coherence targets, constraint pressure, overflow conditions, and sovereignty-preserving vetoes in a form that can be inspected and tested.
+- **Information and signal analysis** — study how resonance, contradiction, and accumulated noise affect whether a signal becomes determinate.
+- **Physically bounded computation** — reason about entropy ceilings, finite precision, and the tradeoff between truncation and rounding error.
+- **Formal theory development** — turn broad interdisciplinary claims into definitions, theorems, counterexamples, and explicit proof obligations.
+
+A concrete implementation might use an `EpistemicFrame` to encode a decision process: `C` measures supporting coherence, `K` measures unresolved contradiction, and `Theta` specifies the minimum margin required before the system may commit. The current repository verifies the mathematics of this pattern; selecting valid domain-specific measures and thresholds remains an empirical and modeling responsibility.
+
+---
+
 ## Repository Structure
 
 ```
