@@ -1,4 +1,4 @@
-# Epistemic Physics — Formal Verification Suite
+# Epistemic Physics
 
 **Amber Anson · AmberContinuum Research**
 
