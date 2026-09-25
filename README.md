@@ -4,7 +4,7 @@
 
 ## What is this?
 
-This repository contains a Lean 4 formalization prototype for a research program called **Epistemic Physics**. Lean is a proof assistant — software that checks mathematical arguments the way a compiler checks code. Every theorem marked ✅ has been verified by a machine, but the formalized mathematics should not be confused with experimental confirmation of the physical interpretation.
+This repository presents **Epistemic Physics**, an AmberContinuum Research project by Amber Anson. The proposed framework studies how unresolved systems become determinate across physical computation, information geometry, and agent alignment. The repository contains three research papers and a Lean 4 formalization of selected mathematical claims. Lean checks the stated theorems; open claims are marked separately, and the proposed physical interpretation remains unverified.
 
 ---
 
