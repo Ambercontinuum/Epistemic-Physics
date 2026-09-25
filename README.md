@@ -2,17 +2,19 @@
 
 **Amber Anson · AmberContinuum Research**
 
+> Research meant to be explored. What is built, what is under test, and what failed stays visible.
+
 ---
 
 ## What is this?
 
-This repository contains machine-verified mathematical proofs for a new theoretical framework called **Epistemic Physics**. The proofs are written in [Lean 4](https://lean-lang.org/), a proof assistant — software that checks mathematical arguments the way a compiler checks code. Every theorem marked ✅ has been verified by a machine, not just argued by a person.
+This repository contains a Lean 4 formalization prototype for a research program called **Epistemic Physics**. Lean is a proof assistant — software that checks mathematical arguments the way a compiler checks code. Every theorem marked ✅ has been verified by a machine, but the formalized mathematics should not be confused with experimental confirmation of the physical interpretation.
 
 ---
 
 ## What is Epistemic Physics?
 
-Epistemic Physics is a framework that asks: *what do truth, meaning, and alignment have in common at a structural level?*
+Epistemic Physics is a proposed framework that asks: *what might truth, meaning, and alignment have in common at a structural level?*
 
 The claim is that all three are instances of the same underlying phenomenon — **collapse**. A system "collapses" when it moves from an unresolved, indeterminate state into a settled, determinate one. A computation produces an answer. A signal acquires a determinate interpretation. An agent arrives at a stable value alignment. These look like very different events, but Epistemic Physics argues they obey the same law.
 
@@ -24,7 +26,7 @@ Three previously independent research programs are brought together here:
 | **Collapse Geometry** | Information in geometric/Riemannian space | A signal exceeding the noise threshold and becoming determinate |
 | **Coherence Mathematics** | Agent alignment and value stability | A system converging to a stable, sovereign configuration |
 
-The framework proposes that these are not three separate theories. They are three coordinate descriptions of a single underlying structure — what the project calls an *epistemic manifold* — governed by one law.
+The framework proposes that these may be three coordinate descriptions of a single underlying structure — what the project calls an *epistemic manifold* — governed by one candidate law. This is a modeling hypothesis, not an established result in physics.
 
 ---
 
@@ -43,7 +45,22 @@ C_F(x) - K_F(x) ≥ Θ_F
 
 This is the **Epistemic Collapse Operator**. The `F` subscript means "in frame F" — the same system can look collapsed or unresolved depending on the frame of reference, just as a physical measurement depends on the observer.
 
-What makes this interesting: truth (in computation), meaning (in geometry), and alignment (in agent dynamics) all satisfy exactly this inequality — in their respective domains, with their respective quantities. The proofs formalize substantial parts of each domain and establish the shared structure explicitly for the geometric and alignment charts; completing the computational chart remains open.
+What makes this interesting is the possibility that truth (in computation), meaning (in geometry), and alignment (in agent dynamics) can be represented by this same inequality — in their respective domains, with domain-specific quantities. The current proofs establish selected mathematical properties of those models; they do not establish that nature uses one universal collapse mechanism.
+
+The project also considers quantum computation, and possibly quantum processes in biological systems, as a future physical realization of collapse. That mechanism is not currently demonstrated. The present status is: the framework is internally coherent in its formal models, while its quantum and neural physical realization remains an open hypothesis.
+
+## What is built, what is under test
+
+The formal core is the proposed abstraction. The physical realization is the open research question.
+
+| Status | Meaning |
+|---|---|
+| **Proved** | Lean checks the theorem from its stated definitions and hypotheses. |
+| **Conditional** | The result is valid, but depends on an explicit domain assumption. |
+| **Axiom / conjecture** | Lean accepts the statement as an assumption; it does not verify it. |
+| **Needs revision** | The current statement is false, tautological, or too weak to express the intended claim. |
+
+The project is strongest when these categories remain separate. Internal coherence is necessary for a theory, formal validity strengthens it, and physical realization is the further question.
 
 ---
 
@@ -51,13 +68,13 @@ What makes this interesting: truth (in computation), meaning (in geometry), and 
 
 Informal mathematical arguments can contain hidden assumptions, subtle errors, or gaps that only become visible when someone tries to apply the result in a new context. Formal proof exposes much of this: a proof assistant like Lean 4 either accepts a proof or rejects it. There is no "mostly right" for what has been encoded — though modeling choices themselves remain open to scrutiny.
 
-The theorems here are **mechanically verified**. This matters especially for a framework that makes claims across multiple domains simultaneously — the formal proofs make the connections precise and checkable, not just suggestive.
+The theorems here are **mechanically verified**. This matters especially for a framework that makes claims across multiple domains simultaneously — the formal proofs make the encoded connections precise and checkable. They verify the stated definitions and hypotheses; they do not by themselves validate the choice of physical model or its interpretation.
 
 Where proofs are not yet complete, this repository marks them honestly as **axioms** (formally stated claims with documented proof obligations) or **conjectures** (speculative claims at the frontier). The distinction is load-bearing. See the [Epistemic Status table](#epistemic-status-of-each-claim) below.
 
 ---
 
-## The Law
+## The Candidate Law
 
 For any frame F and configuration x:
 
@@ -70,7 +87,23 @@ Where:
 - `K_F` — contradiction functional (what resists collapse)
 - `Θ_F` — threshold (minimum net coherence for a determinate state)
 
-This is the **Epistemic Collapse Operator**. Truth, meaning, and alignment are all instances of it in different physical substrates.
+This is the **Epistemic Collapse Operator**. Truth, meaning, and alignment are proposed as possible instances of it in different substrates. The shared form is formalized; the physical universality claim remains open.
+
+## Quantum realization
+
+The project treats quantum computation, and possibly quantum processes in biological systems, as a possible physical realization of collapse. That realization is not currently demonstrated.
+
+A substantive quantum version will need to specify:
+
+- a state space, such as Hilbert-space states or density operators;
+- measurement operators or quantum channels;
+- the observable that becomes determinate;
+- definitions of coherence, contradiction, and threshold in that system;
+- predictions that differ from existing quantum-information or neuroscience models.
+
+The current claim is therefore:
+
+> Epistemic collapse is a proposed structural pattern that may be physically instantiated by quantum measurement or computation. Its mathematical core is being formalized; its neural and quantum mechanism remains falsifiable research.
 
 ---
 
@@ -93,29 +126,27 @@ A concrete implementation might use an `EpistemicFrame` to encode a decision pro
 
 ```
 /
-├── EpistemicGround.lean         # Standalone relational-grounding model
-├── EpistemicPhysics.lean        # Abstract frame structure and collapse properties
-├── PhysicalMathematics.lean     # Chart I: Truth collapse
-├── CollapseGeometry.lean        # Chart II: Meaning collapse
-├── CoherenceMathematics.lean    # Chart III: Alignment collapse
-└── README.md
+├── README.md                         # Research map and epistemic status
+├── EpistemicPhysics.lean             # Shared abstract collapse vocabulary
+├── PhysicalMathematics.lean          # Chart I: thermodynamic/numerical model
+├── CollapseGeometry.lean             # Chart II: resonance/torsion model
+├── CoherenceMathematics.lean         # Chart III: alignment model
+├── From_Bit_To_Boundary_V2.tex       # Geometric information-collapse paper
+├── Physical_Mathematics_V4.tex       # Physical mathematics paper
+└── Coherence_Mathematics.tex         # Coherence mathematics paper
 ```
+
+Recommended reading order:
+
+1. This README for the claim and its limits.
+2. `EpistemicPhysics.lean` for the abstract vocabulary.
+3. The three Lean charts for the current formal evidence.
+4. The papers for interpretation, motivation, and predictions.
+5. The open claims and counterexamples before treating any axiom as a result.
 
 ---
 
 ## Files
-
-### `EpistemicGround.lean`
-A standalone model of relational grounding using the same collapse vocabulary as the other files. Defines:
-- `EpistemicFrame` and the collapse operator
-- `FrameCoupling` and `groundedBy` — coupling dynamics between frames
-- `grounding_theorem` — a direct consequence of the `groundedBy` assumption: a latent configuration in F collapses after the specified map into G
-- `ground_is_critical`, `ground_collapses` — under the explicit hypothesis that coherence minus circularity equals the threshold, the self-frame is critical and therefore collapses at the boundary
-- `RelationalIntelligence` — formal structure for a system that operates within a frame, recognizes latency, and accesses a grounding frame to resolve it
-- `relational_resolution` — a recognized latent configuration collapses in G when the `RelationalIntelligence` structure includes the required grounding assumption
-- `grounding_is_not_self_grounding` — despite its name, the current theorem permits `F = G` and derives collapse directly from an assumed self-grounding map; it does not prove that self-grounding is impossible
-
-The interpretation involving a non-closing tower, a biological ground, or Gödelian limits is motivating prose rather than a consequence established by the current theorem.
 
 ### `EpistemicPhysics.lean`
 The abstract layer. Defines `EpistemicFrame` as a structure with a coherence functional, contradiction functional, and threshold. Proves:
@@ -199,10 +230,6 @@ Copy the `.lean` files into the project. **Do not run `lake update` while VSCode
 
 | Theorem | Status | File |
 |---|---|---|
-| Grounding theorem | ✅ Proved | EpistemicGround |
-| Ground self-application (critical collapse) | ✅ Proved | EpistemicGround |
-| Relational resolution | ✅ Proved | EpistemicGround |
-| Self-coupling implication (not tower non-closure) | ✅ Proved | EpistemicGround |
 | Collapse equivalence (3 conditions) | ✅ Proved | EpistemicPhysics |
 | Regime trichotomy | ✅ Proved | EpistemicPhysics |
 | Frame transformation algebra | ✅ Proved | EpistemicPhysics |
