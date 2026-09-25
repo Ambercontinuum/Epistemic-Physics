@@ -1,9 +1,5 @@
 # Epistemic Physics
 
-**Amber Anson · AmberContinuum Research**
-
-> Research meant to be explored. What is built, what is under test, and what failed stays visible.
-
 ---
 
 ## What is this?
