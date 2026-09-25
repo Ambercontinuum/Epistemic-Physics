@@ -309,6 +309,14 @@ This repo is designed to be used as a formal reasoning substrate. Guidelines:
 
 ---
 
+## How this work was developed
+
+Epistemic Physics was developed through an iterative collaboration between Amber Anson and AI tools. Anson set the research direction and supplied the papers, proposed invariants, definitions, and interpretations. AI assisted with drafting and revising the exposition and translating the mathematical ideas into Lean definitions and proofs.
+
+Anson reviewed the generated work, manually entered the Lean files into the web editor, and worked through errors until they checked without `sorry`. The repository's pinned Lean and Mathlib project was subsequently built locally with Lake. This process documents how the formalization was produced; the Lean proofs establish the encoded mathematical results under their stated assumptions, while the proposed physical interpretation remains an open research question.
+
+---
+
 ## References
 
 - Anson, A. (2025). *Physical Mathematics: A Foundational Framework*. AmberContinuum Research.
