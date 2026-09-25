@@ -183,14 +183,13 @@ theorem chart_universality
   (metric_ge_one_iff F x).mpr h
 
 -- ============================================================
--- §9  AXIOMATIZED CLAIMS
+-- §9  OPEN CLAIMS
 -- ============================================================
 
-/-- Every frame has at least one collapsed configuration.
-    Proof obligation: construct x with C(x) - K(x) >= Theta
-    in each concrete instantiation. -/
-axiom frame_nontriviality (F : EpistemicFrame) :
-    ∃ x : F.Config, collapses F x
+/-- A proposed nontriviality property. False for arbitrary frames;
+    concrete instantiations must establish it separately. -/
+def frame_nontriviality (F : EpistemicFrame) : Prop :=
+  ∃ x : F.Config, collapses F x
 
 /-- Collapse is irreversible under frame transformations.
     Proof obligation: requires topology on Config. -/

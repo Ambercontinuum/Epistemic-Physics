@@ -53,7 +53,8 @@ The formal core is the proposed abstraction. The physical realization is the ope
 |---|---|
 | **Proved** | Lean checks the theorem from its stated definitions and hypotheses. |
 | **Conditional** | The result is valid, but depends on an explicit domain assumption. |
-| **Axiom / conjecture** | Lean accepts the statement as an assumption; it does not verify it. |
+| **Axiom** | Lean accepts the statement as an assumption; it does not verify it. |
+| **Unasserted proposition** | Lean records a proposed statement as a `Prop` definition without assuming it is true. |
 | **Needs revision** | The current statement is false, tautological, or too weak to express the intended claim. |
 
 The project is strongest when these categories remain separate. Internal coherence is necessary for a theory, formal validity strengthens it, and physical realization is the further question.
@@ -66,7 +67,7 @@ Informal mathematical arguments can contain hidden assumptions, subtle errors, o
 
 The theorems here are **mechanically verified**. This matters especially for a framework that makes claims across multiple domains simultaneously — the formal proofs make the encoded connections precise and checkable. They verify the stated definitions and hypotheses; they do not by themselves validate the choice of physical model or its interpretation.
 
-Where proofs are not yet complete, this repository marks them honestly as **axioms** (formally stated claims with documented proof obligations) or **conjectures** (speculative claims at the frontier). The distinction is load-bearing. See the [Epistemic Status table](#epistemic-status-of-each-claim) below.
+Where proofs are not yet complete, this repository distinguishes **axioms** (assumed in Lean) from **unasserted propositions** (recorded without being assumed). Claims known to be false as stated are unasserted propositions pending revision. See the [Epistemic Status table](#epistemic-status-of-each-claim) below.
 
 ---
 
@@ -123,6 +124,9 @@ A concrete implementation might use an `EpistemicFrame` to encode a decision pro
 ```
 /
 ├── README.md                         # Research map and epistemic status
+├── lean-toolchain                    # Pinned Lean 4 version
+├── lakefile.toml                     # Lake targets and Mathlib dependency
+├── lake-manifest.json                # Exact dependency revisions
 ├── EpistemicPhysics.lean             # Shared abstract collapse vocabulary
 ├── PhysicalMathematics.lean          # Chart I: thermodynamic/numerical model
 ├── CollapseGeometry.lean             # Chart II: resonance/torsion model
@@ -153,9 +157,9 @@ The abstract layer. Defines `EpistemicFrame` as a structure with a coherence fun
 - `FrameTransformation` with composition and identity — substrate independence has algebraic structure
 - `chart_universality` — collapse implies metric ≥ 1, in any frame
 
-Axiomatized claims requiring revision:
-- `frame_nontriviality` — false for an arbitrary frame without assumptions on `C` and `K`
-- `collapse_irreversibility` — already follows from `FrameTransformation.preserves_collapse` and `collapsed_not_latent`; no topology is needed for the statement currently encoded
+Open claims requiring revision:
+- `frame_nontriviality` — an unasserted proposition, false for an arbitrary frame without assumptions on `C` and `K`
+- `collapse_irreversibility` — still an axiom, although it follows from `FrameTransformation.preserves_collapse` and `collapsed_not_latent`; no topology is needed for the statement currently encoded
 
 ### `PhysicalMathematics.lean`
 Physical and numerical results intended to support Chart I. Unlike Charts II and III, this file does not yet define an `EpistemicFrame` instantiation. It proves:
@@ -165,10 +169,10 @@ Physical and numerical results intended to support Chart I. Unlike Charts II and
 - `optimalStep_pos` — the optimal step size is well-defined and positive
 - `laws_coupled` — the bit-budget ceiling from Law 1 applies directly to the precision parameter in Law 2
 
-Conjectures (formally stated, speculative):
-- `conjectureA_quantum_complexity_reduction` — there exists a nonempty class of inputs on which quantum complexity is strictly less than classical complexity
-- `conjectureB_fractal_dimension_convergence` — a sequence remaining in (1, 2) converges to a limit in (1, 2); as currently stated this is false without an additional hypothesis such as monotonicity or the Cauchy property
-- `conjectureC_geometric_foundation` — a preliminary formal placeholder for geometric realization; its current type does not yet encode the full pointwise equivalence described in the accompanying paper
+Unasserted research propositions (each needs revision):
+- `conjectureA_quantum_complexity_reduction` — currently claims quantum complexity is lower for every input and every pair of positive complexity functions; identical functions refute it. The intended nonempty-subclass claim is not yet encoded.
+- `conjectureB_fractal_dimension_convergence` — a sequence remaining in (1, 2) need not converge
+- `conjectureC_geometric_foundation` — the current type cannot encode pointwise equivalence for a nonconstant relation because its right side does not depend on the particular integers `a` and `b`
 
 Based on: Landauer (1961), Bekenstein (1981), Higham (2002).
 
@@ -182,7 +186,7 @@ Chart II instantiation with `Config = ℝ`. The current formal model is scalar; 
 - `stationaryVariance_antitone` — variance decreases as regularization scale grows
 - `moments_scaling_relation` — Var = Mean / (3λ²)
 - `torsion_monotonicity` — collapse probability strictly decreasing in torsion shift
-- `postShannon_is_epistemic_collapse` — R - τ ≥ ε is exactly the abstract collapse condition
+- `postShannon_is_epistemic_collapse` — R - τ ≥ ε is exactly the abstract collapse condition by definition
 
 Based on: Anson (2026), *From Bit to Boundary: A Geometric Theory of Information Collapse*.
 
@@ -208,17 +212,13 @@ Based on: Anson (2025), *Coherence Mathematics: A Rigorous Foundation for Asymme
 4. Wait for initialization (~60 seconds)
 5. Green = verified. Axioms show as warnings, not errors.
 
-### Local (VSCode + Lean 4 extension)
+### Local (VS Code + Lean 4 extension)
 ```bash
-# Prerequisites: elan installed
-lake new epistemic-physics
-cd epistemic-physics
-# Add to lakefile.lean:
-#   require mathlib from git "https://github.com/leanprover-community/mathlib4"
-lake update
+# Prerequisite: elan installed
+lake exe cache get
 lake build
 ```
-Copy the `.lean` files into the project. **Do not run `lake update` while VSCode is open** — it will download the full Mathlib cache (~8GB) and compete with the language server.
+Run these commands from the repository root. The committed `lean-toolchain`, `lakefile.toml`, and `lake-manifest.json` pin the Lean and Mathlib versions. `lake exe cache get` downloads Mathlib's compiled files; `lake build` checks all four Lean files.
 
 ---
 
@@ -233,9 +233,9 @@ Copy the `.lean` files into the project. **Do not run `lake update` while VSCode
 | Law 2: error bound positivity | ✅ Proved | PhysicalMathematics |
 | Law 2: independent monotonicity | ✅ Proved | PhysicalMathematics |
 | Laws 1 & 2 coupling | ✅ Proved | PhysicalMathematics |
-| Quantum advantage on a nonempty subclass | 🔬 Conjecture | PhysicalMathematics |
-| Fractal dimension convergence (requires revision) | ⚠️ False as stated | PhysicalMathematics |
-| Geometric foundation (preliminary encoding) | 🔬 Conjecture | PhysicalMathematics |
+| Quantum advantage for every positive complexity pair | ⚠️ False as stated; unasserted | PhysicalMathematics |
+| Fractal dimension convergence | ⚠️ False as stated; unasserted | PhysicalMathematics |
+| Geometric foundation (preliminary encoding) | ⚠️ False as stated; unasserted | PhysicalMathematics |
 | Resonance kernel properties | ✅ Proved | CollapseGeometry |
 | Torsion shot-noise properties | ✅ Proved | CollapseGeometry |
 | Positivity and scaling of defined moment formulas | ✅ Proved | CollapseGeometry |
@@ -245,45 +245,45 @@ Copy the `.lean` files into the project. **Do not run `lake update` while VSCode
 | Lyapunov characterization | ✅ Proved | CoherenceMathematics |
 | Overflow detection | ✅ Proved | CoherenceMathematics |
 | Veto soundness & completeness | ✅ Proved | CoherenceMathematics |
-| Arbitrary-frame nontriviality | ⚠️ False as stated | EpistemicPhysics |
+| Arbitrary-frame nontriviality | ⚠️ False as stated; unasserted | EpistemicPhysics |
 | Collapse preservation under frame transformation | ♻️ Derivable | EpistemicPhysics |
-| Uniqueness of collapse outcome | ⚠️ False as stated | CollapseGeometry |
-| Asymmetric recursion convergence | ⚠️ False as stated | CoherenceMathematics |
+| Uniqueness of collapse outcome | ⚠️ False as stated; unasserted | CollapseGeometry |
+| Asymmetric recursion convergence | ⚠️ False as stated; unasserted | CoherenceMathematics |
 | Sovereignty under override | ♻️ Tautological | CoherenceMathematics |
 
 **📐 Axiom** = a formally declared assumption with a precise type signature and documented proof obligation. Lean permits downstream theorems to use it, but does not verify the axiom itself.
 
-**🔬 Conjecture** = formally stated as an `axiom` but speculative in content. It is included to mark the boundary of what has been established.
+**Unasserted proposition** = a `def ... : Prop` declaration. It names a statement but supplies no proof and adds no assumption to Lean.
 
-**⚠️ False as stated** = the current axiom admits elementary counterexamples and must not be treated as a viable conjecture until its hypotheses are strengthened.
+**⚠️ False as stated** = the current proposition admits elementary counterexamples and must be revised before it can become a viable conjecture.
 
 **♻️ Derivable/Tautological** = the statement needs no axiom at its current type: it either follows from existing definitions and theorems or simply repeats one of its hypotheses.
 
 ---
 
-## Axiomatized Claims Requiring Revision
+## Claims Requiring Revision
 
 The following declarations should be strengthened, weakened, or replaced before being treated as genuine open problems.
 
-1. **Frame nontriviality** (`EpistemicPhysics`): false for unrestricted `EpistemicFrame`s. For example, a frame with `C = 0`, `K = 0`, and `Theta = 1` has no collapsed configuration. Nontriviality should be a property or hypothesis of a frame, not an axiom about every frame.
+1. **Frame nontriviality** (`EpistemicPhysics`): false for unrestricted `EpistemicFrame`s. For example, a frame with `C = 0`, `K = 0`, and `Theta = 1` has no collapsed configuration. It is now an unasserted frame property; concrete frames need their own proofs.
 
 2. **Collapse irreversibility** (`EpistemicPhysics`): the current conclusion, `¬ isLatent F' (T.map x)`, follows from `T.preserves_collapse x hc` and the existing theorem `collapsed_not_latent`. If the intended claim concerns information loss, non-injectivity, or positive-measure fibers, those concepts need to appear in a new formal statement.
 
-3. **Uniqueness of collapse outcome** (`CollapseGeometry`): false for arbitrary nonempty finite basis sets because two basis points can have equal resonance—for example, points symmetric around `ψ`. A revised theorem needs a unique-nearest-point or no-ties hypothesis.
+3. **Uniqueness of collapse outcome** (`CollapseGeometry`): false for arbitrary nonempty finite basis sets because two basis points can have equal resonance—for example, points symmetric around `ψ`. It is now unasserted; a revised theorem needs a unique-nearest-point or no-ties hypothesis.
 
-4. **Asymmetric recursion convergence** (`CoherenceMathematics`): false as stated when `kappa₀ = target`, because the nonnegative Lyapunov function is already zero and cannot strictly decrease. A revised statement needs a non-optimal initial-state hypothesis and an explicit recursion or update rule.
+4. **Asymmetric recursion convergence** (`CoherenceMathematics`): false as stated when `kappa₀ = target`, because the nonnegative Lyapunov function is already zero and cannot strictly decrease. It is now unasserted; a revised statement needs a non-optimal initial-state hypothesis and an explicit recursion or update rule.
 
 5. **Sovereignty preservation under override** (`CoherenceMathematics`): currently states `sovereigntyHolds intent target → sovereigntyHolds intent target`, so it is provable by returning the hypothesis. A substantive version must encode the override dynamics and prove preservation across the resulting state transition.
 
-## Conjectures (Open, Speculative)
+## Unasserted Research Propositions
 
-The following are formally stated in `PhysicalMathematics.lean` as `axiom` but are not proof obligations — they are speculative claims at the boundary of the framework.
+The following are defined as `Prop` in `PhysicalMathematics.lean`. Lean does not assume them. Each current statement has a counterexample and needs revision before it can serve as a conjecture.
 
-1. **Quantum complexity reduction** (`conjectureA`): asserts that there is a nonempty predicate-defined class of inputs on which quantum complexity is strictly less than classical complexity. This is a research direction, not an established complexity-theoretic result.
+1. **Quantum complexity reduction** (`conjectureA`): currently asserts strict quantum advantage for every input and every pair of positive complexity functions. Identical constant functions refute it. The intended nonempty-subclass claim is a research direction, not the current Lean statement.
 
 2. **Fractal dimension convergence** (`conjectureB`): as written, this is false. A sequence may remain strictly between 1 and 2 while oscillating indefinitely. The statement needs an additional hypothesis, such as monotonicity together with suitable bounds, or the Cauchy property. Even with monotonicity, extra conditions are needed to ensure that the limit remains strictly inside (1, 2).
 
-3. **Geometric foundation** (`conjectureC`): the intended claim is that every integer relation has a geometric realization preserving its pointwise truth conditions. The present Lean type is only a placeholder: `R_G (φ R)` does not depend on the particular integers `a` and `b`, so it does not yet faithfully encode the prose claim. The Goldbach-graph construction is a motivating example rather than a consequence of the current axiom.
+3. **Geometric foundation** (`conjectureC`): the intended claim is that every integer relation has a geometric realization preserving its pointwise truth conditions. The present Lean type is false for nonconstant relations: `R_G (φ R)` does not depend on the particular integers `a` and `b`. The Goldbach-graph construction is a motivating example rather than a consequence of this proposition.
 
 ---
 
@@ -303,7 +303,7 @@ This repo is designed to be used as a formal reasoning substrate. Guidelines:
 
 **The web editor Mathlib snapshot is dated.** Some module paths differ from local Mathlib. Use `import Mathlib` (single line) not granular imports.
 
-**Axioms use `axiom` not `theorem ... sorry`.** Both introduce an unverified assumption into the trusted environment, but `axiom` communicates that the assumption is deliberate and exposes its type signature as a future proof obligation.
+**Unproved claims use `def ... : Prop` until their assumptions are sound.** An `axiom` introduces an unverified assumption; `theorem ... sorry` also admits an unverified result. Neither is appropriate for a statement with a known counterexample.
 
 **The collapse condition is `≥` not `>`.** Critical configurations satisfy `collapses`. This is intentional and proved in `critical_collapses`.
 

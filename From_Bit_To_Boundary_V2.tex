@@ -313,18 +313,16 @@ theorem coherenceFrame_nontriviality (w : Fin 4 → ℝ)
   exact hcollapse
 
 -- ============================================================
--- §9  AXIOMATIZED CLAIMS
+-- §9  OPEN CLAIMS
 -- ============================================================
 
-/-- Axiom: Asymmetric recursion converges to the globally
-    coherent shape ΣCM in finite time when it exists.
-    Proof obligation: requires computable recursion model
-    and Lipschitz continuity of constraint functions. -/
-axiom asymmetric_recursion_convergence
+/-- Proposed strict Lyapunov decrease. False when kappa₀ = target;
+    a revised claim needs an update rule and a non-optimal starting state. -/
+def asymmetric_recursion_convergence
     (w : Fin 4 → ℝ) (hw : ∀ i, 0 < w i)
     (kappa_min : ℝ) (D : ConstraintField)
-    (target kappa₀ : CoherenceVec)
-    (hfeasible : ∃ kappa, isFeasible kappa_min D kappa) :
+    (target kappa₀ : CoherenceVec) : Prop :=
+    (∃ kappa, isFeasible kappa_min D kappa) →
     ∃ (n : ℕ) (kappa_n : CoherenceVec),
       isFeasible kappa_min D kappa_n ∧
       lyapunov w target kappa_n < lyapunov w target kappa₀

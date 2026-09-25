@@ -213,13 +213,14 @@ theorem postShannon_is_epistemic_collapse
   simp only
 
 -- ============================================================
--- §8  AXIOMATIZED CLAIMS
+-- §8  OPEN CLAIMS
 -- ============================================================
 
-axiom collapse_uniqueness
+-- False when distinct basis points have equal resonance at ψ.
+def collapse_uniqueness
     (σ ε lam : ℝ) (hσ : 0 < σ) (hε : 0 < ε)
     (times : List ℝ) (ψ : ℝ)
-    (B : Finset ℝ) (hB : B.Nonempty) :
+    (B : Finset ℝ) (hB : B.Nonempty) : Prop :=
     ∃! b ∈ B, ∀ b' ∈ B, b' ≠ b →
       resonance σ ψ b > resonance σ ψ b'
 

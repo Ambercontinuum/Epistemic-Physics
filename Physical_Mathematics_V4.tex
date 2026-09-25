@@ -115,7 +115,7 @@ irregularity at finite resolution is a projection artifact of underlying fractal
 with a computable convergence test. \textbf{Conjecture~C} (Geometric Foundation) proposes
 that numerical systems are coordinate representations of prior geometric structures, with a
 spectral gap falsification criterion. The two laws are formally verified in Lean~4~\cite{lean4} (Mathlib~\cite{mathlib2020});
-the three conjectures are axiomatized with precise type signatures. All five components
+ the three research claims are recorded as unasserted propositions with precise type signatures. All five components
 generate experimentally testable predictions.
 \end{abstract}
 
@@ -726,9 +726,9 @@ The following file contains the complete Lean~4~\cite{lean4} (Mathlib~\cite{math
 Anson's First and Second Laws, verified mechanically by the Lean type checker.
 The file can be pasted directly into the Lean~4 web editor at
 \url{https://live.lean-lang.org} with Mathlib selected to reproduce the
-verification. The conjectures are axiomatized using \texttt{axiom} declarations,
-which assert claims with precise type signatures without proof---the correct
-Lean~4 posture for open mathematical claims.
+verification. The three research claims are recorded using \texttt{def ... : Prop}
+declarations. Their current formal statements have counterexamples, so Lean
+neither assumes nor proves them; each needs revised hypotheses or encoding.
 
 \bigskip
 
@@ -912,27 +912,29 @@ theorem laws_coupled
   law1_core hR hE hhbar hc hk_B hT p hp
 
 -- ===========================================================
--- CONJECTURES (axiomatized -- proof obligation open)
+-- RESEARCH PROPOSITIONS (unasserted; current forms need revision)
 -- ===========================================================
 
 -- Conjecture A: Complexity class membership is substrate-dependent.
-axiom conjectureA_quantum_complexity_reduction
+def conjectureA_quantum_complexity_reduction
     (C_classical C_quantum : N -> R)
-    (hcl : forall n, 0 < C_classical n)
-    (hq  : forall n, 0 < C_quantum n) :
+    : Prop :=
+    (forall n, 0 < C_classical n) ->
+    (forall n, 0 < C_quantum n) ->
     forall n, C_quantum n < C_classical n
 
 -- Conjecture B: Hausdorff dimension of a number-theoretic
 -- sequence converges to a stable limit in (1, 2).
-axiom conjectureB_fractal_dimension_convergence
-    (D : N -> R) (hD : forall n, 1 < D n /\ D n < 2) :
+def conjectureB_fractal_dimension_convergence
+    (D : N -> R) : Prop :=
+    (forall n, 1 < D n /\ D n < 2) ->
     exists (D_H : R), 1 < D_H /\ D_H < 2 /\
       Filter.Tendsto D Filter.atTop (nhds D_H)
 
 -- Conjecture C: Every numerical relationship has a geometric
 -- realization via a graph embedding.
-axiom conjectureC_geometric_foundation
-    (R : Z -> Z -> Prop) (R_G : (Z -> Z -> Prop) -> Prop) :
+def conjectureC_geometric_foundation
+    (R : Z -> Z -> Prop) (R_G : (Z -> Z -> Prop) -> Prop) : Prop :=
     exists (phi : (Z -> Z -> Prop) -> (Z -> Z -> Prop)),
       forall (a b : Z), R a b <-> R_G (phi R)
 

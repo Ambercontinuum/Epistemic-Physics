@@ -153,22 +153,25 @@ theorem laws_coupled
     bekensteinBound R E ℏ c < p * (k_B * T * log 2) :=
   law1_core hR hE hℏ hc hk_B hT p hp
 
--- ── Conjectures ──────────────────────────────────────────────────────────────
+-- ── Unasserted research claims ───────────────────────────────────────────────
 
-axiom conjectureA_quantum_complexity_reduction
-    (C_classical C_quantum : ℕ → ℝ)
-    (hcl : ∀ n, 0 < C_classical n)
-    (hq  : ∀ n, 0 < C_quantum n) :
+-- False for arbitrary positive functions (e.g. identical constant functions).
+def conjectureA_quantum_complexity_reduction
+    (C_classical C_quantum : ℕ → ℝ) : Prop :=
+    (∀ n, 0 < C_classical n) →
+    (∀ n, 0 < C_quantum n) →
     ∀ n, C_quantum n < C_classical n
 
-axiom conjectureB_fractal_dimension_convergence
-    (D : ℕ → ℝ)
-    (hD : ∀ n, 1 < D n ∧ D n < 2) :
+-- Boundedness in (1, 2) alone does not imply convergence.
+def conjectureB_fractal_dimension_convergence
+    (D : ℕ → ℝ) : Prop :=
+    (∀ n, 1 < D n ∧ D n < 2) →
     ∃ (D_H : ℝ), 1 < D_H ∧ D_H < 2 ∧ Filter.Tendsto D Filter.atTop (nhds D_H)
 
-axiom conjectureC_geometric_foundation
+-- The right side does not depend on a or b, so this is false for nonconstant R.
+def conjectureC_geometric_foundation
     (R : ℤ → ℤ → Prop)
-    (R_G : (ℤ → ℤ → Prop) → Prop) :
+    (R_G : (ℤ → ℤ → Prop) → Prop) : Prop :=
     ∃ (φ : (ℤ → ℤ → Prop) → (ℤ → ℤ → Prop)),
       ∀ (a b : ℤ), R a b ↔ R_G (φ R)
 
