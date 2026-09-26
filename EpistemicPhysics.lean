@@ -191,13 +191,15 @@ theorem chart_universality
 def frame_nontriviality (F : EpistemicFrame) : Prop :=
   ∃ x : F.Config, collapses F x
 
-/-- Collapse is irreversible under frame transformations.
-    Proof obligation: requires topology on Config. -/
-axiom collapse_irreversibility
+/-- A collapsed configuration is not latent after a frame transformation.
+    This follows from `preserves_collapse`; a substantive irreversibility
+    claim (information loss, non-injectivity) needs a new statement. -/
+theorem collapse_irreversibility
     (F F' : EpistemicFrame)
     (T  : FrameTransformation F F')
     (x  : F.Config)
     (hc : collapses F x) :
-    ¬ isLatent F' (T.map x)
+    ¬ isLatent F' (T.map x) :=
+  collapsed_not_latent F' (T.map x) (T.preserves_collapse x hc)
 
 end EpistemicPhysics

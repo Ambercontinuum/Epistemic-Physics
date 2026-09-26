@@ -224,11 +224,28 @@ def collapse_uniqueness
     ∃! b ∈ B, ∀ b' ∈ B, b' ≠ b →
       resonance σ ψ b > resonance σ ψ b'
 
-axiom collapse_irreversibility_chartII
+theorem resonance_le_of_sq_le (σ ψ b c : ℝ)
+    (h : (ψ - b) ^ 2 ≤ (ψ - c) ^ 2) :
+    resonance σ ψ c ≤ resonance σ ψ b := by
+  unfold resonance
+  apply exp_le_exp.mpr
+  apply div_le_div_of_nonneg_right _ (by positivity)
+  linarith
+
+-- Two distinct states resonate with b at least as strongly as with 0.
+-- Provable as stated; it does not yet express irreversibility.
+theorem collapse_irreversibility_chartII
     (σ lam ε : ℝ) (hσ : 0 < σ) (hε : 0 < ε)
     (times : List ℝ) (b : ℝ) :
     ∃ ψ₁ ψ₂ : ℝ, ψ₁ ≠ ψ₂ ∧
       resonance σ ψ₁ b ≥ resonance σ ψ₁ 0 ∧
-      resonance σ ψ₂ b ≥ resonance σ ψ₂ 0
+      resonance σ ψ₂ b ≥ resonance σ ψ₂ 0 := by
+  by_cases hb : b = 0
+  · subst hb
+    exact ⟨0, 1, by norm_num, le_refl _, le_refl _⟩
+  · refine ⟨b, 2 * b, ?_, ?_, ?_⟩
+    · intro h; apply hb; linarith
+    · apply resonance_le_of_sq_le; nlinarith [sq_nonneg b]
+    · apply resonance_le_of_sq_le; nlinarith [sq_nonneg b]
 
 end CollapseGeometry

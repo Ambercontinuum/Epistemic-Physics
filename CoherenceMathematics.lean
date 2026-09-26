@@ -327,14 +327,13 @@ def asymmetric_recursion_convergence
       isFeasible kappa_min D kappa_n ∧
       lyapunov w target kappa_n < lyapunov w target kappa₀
 
-/-- Axiom: Sovereignty is preserved under coherence override.
-    Even when Cglobal crosses Cemergent, the inner product
-    with operator intent remains nonneg.
-    Proof obligation: requires dynamics model for the
+/-- Sovereignty is preserved under coherence override.
+    Tautological as stated: the conclusion repeats the hypothesis.
+    A substantive version needs a dynamics model for the
     attractor shift at toverride. -/
-axiom sovereignty_preserved_under_override
+theorem sovereignty_preserved_under_override
     (intent target : CoherenceVec)
     (h : sovereigntyHolds intent target) :
-    sovereigntyHolds intent target
+    sovereigntyHolds intent target := h
 
 end CoherenceMathematics

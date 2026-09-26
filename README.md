@@ -131,7 +131,7 @@ A concrete implementation might use an `EpistemicFrame` to encode a decision pro
 ├── PhysicalMathematics.lean          # Chart I: thermodynamic/numerical model
 ├── CollapseGeometry.lean             # Chart II: resonance/torsion model
 ├── CoherenceMathematics.lean         # Chart III: alignment model
-├── From_Bit_To_Boundary_V2.tex       # Geometric information-collapse paper
+├── From_Bit_To_Boundary_V4.tex       # Geometric information-collapse paper (rebuilt from PDF)
 ├── Physical_Mathematics_V4.tex       # Physical mathematics paper
 └── Coherence_Mathematics.tex         # Coherence mathematics paper
 ```
@@ -159,7 +159,7 @@ The abstract layer. Defines `EpistemicFrame` as a structure with a coherence fun
 
 Open claims requiring revision:
 - `frame_nontriviality` — an unasserted proposition, false for an arbitrary frame without assumptions on `C` and `K`
-- `collapse_irreversibility` — still an axiom, although it follows from `FrameTransformation.preserves_collapse` and `collapsed_not_latent`; no topology is needed for the statement currently encoded
+- `collapse_irreversibility` — now a theorem derived from `FrameTransformation.preserves_collapse` and `collapsed_not_latent`; it does not yet express a substantive irreversibility claim
 
 ### `PhysicalMathematics.lean`
 Physical and numerical results intended to support Chart I. Unlike Charts II and III, this file does not yet define an `EpistemicFrame` instantiation. It proves:
@@ -187,8 +187,12 @@ Chart II instantiation with `Config = ℝ`. The current formal model is scalar; 
 - `moments_scaling_relation` — Var = Mean / (3λ²)
 - `torsion_monotonicity` — collapse probability strictly decreasing in torsion shift
 - `postShannon_is_epistemic_collapse` — R - τ ≥ ε is exactly the abstract collapse condition by definition
+- `collapse_irreversibility_chartII` — two distinct states resonate with `b` at least as strongly as with `0`; proved, but the statement does not yet express irreversibility
 
-Based on: Anson (2026), *From Bit to Boundary: A Geometric Theory of Information Collapse*.
+Open claims requiring revision:
+- `collapse_uniqueness` — an unasserted proposition, false when basis points tie in resonance
+
+Based on: Anson (2026), *From Bit to Boundary: A Geometric Theory of Information Collapse*. The paper's uniqueness theorem (2.1) assumes no resonance ties (Assumption 3), which `collapse_uniqueness` omits; its irreversibility theorem (2.2) concerns non-injectivity of the collapse map, which `collapse_irreversibility_chartII` does not yet encode.
 
 ### `CoherenceMathematics.lean`
 Chart III instantiation. Config = CoherenceVec (4-dimensional alignment space). Proves:
@@ -198,6 +202,10 @@ Chart III instantiation. Config = CoherenceVec (4-dimensional alignment space). 
 - `overflow_no_convergence` — overflow implies no Lyapunov zero in feasible region
 - `veto_sound`, `veto_complete` — veto operator is sound and complete for sovereignty
 - `coherenceFrame_nontriviality` — frame has a collapsed configuration under low constraint pressure
+
+Open claims requiring revision:
+- `asymmetric_recursion_convergence` — an unasserted proposition, false when `kappa₀ = target`
+- `sovereignty_preserved_under_override` — now a theorem, but tautological: it returns its hypothesis
 
 Based on: Anson (2025), *Coherence Mathematics: A Rigorous Foundation for Asymmetric Recursion*.
 
@@ -210,7 +218,7 @@ Based on: Anson (2025), *Coherence Mathematics: A Rigorous Foundation for Asymme
 2. Select **Mathlib** from the dropdown
 3. Paste any file — each is self-contained
 4. Wait for initialization (~60 seconds)
-5. Green = verified. Axioms show as warnings, not errors.
+5. Green = verified. The repository currently declares no axioms.
 
 ### Local (VS Code + Lean 4 extension)
 ```bash
@@ -246,12 +254,13 @@ Run these commands from the repository root. The committed `lean-toolchain`, `la
 | Overflow detection | ✅ Proved | CoherenceMathematics |
 | Veto soundness & completeness | ✅ Proved | CoherenceMathematics |
 | Arbitrary-frame nontriviality | ⚠️ False as stated; unasserted | EpistemicPhysics |
-| Collapse preservation under frame transformation | ♻️ Derivable | EpistemicPhysics |
+| Collapse preservation under frame transformation | ♻️ Derivable; proved | EpistemicPhysics |
+| Chart II "irreversibility" (weak encoding) | ♻️ Proved; needs revision | CollapseGeometry |
 | Uniqueness of collapse outcome | ⚠️ False as stated; unasserted | CollapseGeometry |
 | Asymmetric recursion convergence | ⚠️ False as stated; unasserted | CoherenceMathematics |
-| Sovereignty under override | ♻️ Tautological | CoherenceMathematics |
+| Sovereignty under override | ♻️ Tautological; proved | CoherenceMathematics |
 
-**📐 Axiom** = a formally declared assumption with a precise type signature and documented proof obligation. Lean permits downstream theorems to use it, but does not verify the axiom itself.
+**📐 Axiom** = a formally declared assumption with a precise type signature and documented proof obligation. Lean permits downstream theorems to use it, but does not verify the axiom itself. No axioms are currently declared.
 
 **Unasserted proposition** = a `def ... : Prop` declaration. It names a statement but supplies no proof and adds no assumption to Lean.
 
@@ -267,13 +276,13 @@ The following declarations should be strengthened, weakened, or replaced before 
 
 1. **Frame nontriviality** (`EpistemicPhysics`): false for unrestricted `EpistemicFrame`s. For example, a frame with `C = 0`, `K = 0`, and `Theta = 1` has no collapsed configuration. It is now an unasserted frame property; concrete frames need their own proofs.
 
-2. **Collapse irreversibility** (`EpistemicPhysics`): the current conclusion, `¬ isLatent F' (T.map x)`, follows from `T.preserves_collapse x hc` and the existing theorem `collapsed_not_latent`. If the intended claim concerns information loss, non-injectivity, or positive-measure fibers, those concepts need to appear in a new formal statement.
+2. **Collapse irreversibility** (`EpistemicPhysics`): the current conclusion, `¬ isLatent F' (T.map x)`, is now proved from `T.preserves_collapse x hc` and the existing theorem `collapsed_not_latent`. The Chart II counterpart, `collapse_irreversibility_chartII`, is also proved, but it only asserts that two states resonate with `b` at least as strongly as with `0`. If the intended claim concerns information loss, non-injectivity, or positive-measure fibers, those concepts need to appear in a new formal statement.
 
 3. **Uniqueness of collapse outcome** (`CollapseGeometry`): false for arbitrary nonempty finite basis sets because two basis points can have equal resonance—for example, points symmetric around `ψ`. It is now unasserted; a revised theorem needs a unique-nearest-point or no-ties hypothesis.
 
 4. **Asymmetric recursion convergence** (`CoherenceMathematics`): false as stated when `kappa₀ = target`, because the nonnegative Lyapunov function is already zero and cannot strictly decrease. It is now unasserted; a revised statement needs a non-optimal initial-state hypothesis and an explicit recursion or update rule.
 
-5. **Sovereignty preservation under override** (`CoherenceMathematics`): currently states `sovereigntyHolds intent target → sovereigntyHolds intent target`, so it is provable by returning the hypothesis. A substantive version must encode the override dynamics and prove preservation across the resulting state transition.
+5. **Sovereignty preservation under override** (`CoherenceMathematics`): currently states `sovereigntyHolds intent target → sovereigntyHolds intent target`, and is now proved by returning the hypothesis. A substantive version must encode the override dynamics and prove preservation across the resulting state transition.
 
 ## Unasserted Research Propositions
 

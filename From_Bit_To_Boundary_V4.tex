@@ -1,0 +1,948 @@
+% From_Bit_To_Boundary_V4.tex
+% Reconstructed from the typeset PDF (From_Bit_to_Boundary_V4-1.pdf, v4.0, April 2026).
+% The original LaTeX source was not available. Text, equations, numbering, and
+% references follow the PDF; layout details may differ. Proofread against the PDF.
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\theoremstyle{plain}
+\newtheorem{assumption}{Assumption}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\emergencystretch=2em
+
+\title{From Bit to Boundary\\[4pt]
+  \large A Geometric Theory of Information Collapse}
+\author{Amber Anson\textsuperscript{1} \quad Claude\textsuperscript{2}\\[2pt]
+  \small \textsuperscript{1}AmberContinuum Research \quad \textsuperscript{2}Anthropic\\
+  \small \texttt{ambercontinuum@gmail.com}}
+\date{April 2026 --- v4.0}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Shannon's information theory (1948) formalized transmission: entropy, channel capacity,
+and coding limits. By design, Shannon excluded semantics---how transmitted signals acquire
+definite meaning. This paper introduces a complementary geometric principle---the Post-Shannon
+Law---governing the conditions under which latent information collapses into stable, observable
+outcomes.
+
+We define a Universal Collapse Operator $\Phi(M, T, R, B, \varepsilon, \tau) \to S$ over a compact
+Riemannian state manifold and derive the collapse boundary condition $R - \tau \geq \varepsilon$,
+where $R$ is resonance coupling (a strictly log-concave kernel), $\tau$ is torsion (internal
+contradiction cost, modeled as a filtered Poisson process), and $\varepsilon$ is the collapse
+threshold. We prove uniqueness, irreversibility, and torsion monotonicity under explicit regularity
+assumptions. The operator exhibits structural isomorphism across cognitive, computational,
+historical, and psychological substrates.
+
+We situate this framework within the cybernetic tradition of Wiener, Ashby, and Bateson,
+identifying the collapse boundary as a generalization of homeostatic regulation: where cybernetics
+describes the maintenance of viable states through feedback, collapse dynamics describe the
+irreversible transition from superposed latent information to determinate structure. Substrate
+independence is evidenced by structural isomorphism with quantum measurement, perceptual
+bistability, bounded-confidence opinion dynamics, and belief revision---each an independent line
+of published research in which the six-component collapse structure is already implicit. Testable
+predictions and a pre-registered empirical protocol are specified.
+\end{abstract}
+
+\noindent\textbf{Keywords:} information theory, information collapse, cybernetics, torsion,
+geometric boundaries, substrate independence, semantic emergence, requisite variety, homeostatic
+regulation
+
+% ============================================================
+\section{Introduction}
+% ============================================================
+
+\subsection{The Shannon Formalism and Its Scope}
+
+Shannon's ``A Mathematical Theory of Communication'' (1948) solved transmission: given a source
+of messages, a noisy channel, and an encoder--decoder pair, Shannon established entropy $H(X)$ as
+the measure of source uncertainty, channel capacity $C$ as the supremum of reliable transmission
+rates, and the source and channel coding theorems as fundamental limits~\cite{shannon1948}. These
+results are substrate-agnostic in the transmission domain---they hold for electrical signals,
+optical fibers, and biological channels alike.
+
+Shannon was explicit about what his formalism excluded:
+\begin{quote}
+``Frequently the messages have meaning; that is they refer to or are correlated according
+to some system with certain physical or conceptual entities. These semantic aspects of
+communication are irrelevant to the engineering problem.''~\cite{shannon1948}
+\end{quote}
+
+This exclusion was methodologically sound---separating transmission fidelity from interpretation
+permitted rigorous treatment of the former. But it left a structural gap: the formalism provides
+no account of how transmitted information acquires definite semantic content, how superposed
+interpretations resolve, or what governs the transition from probabilistic latent states to
+determinate outcomes.
+
+\subsection{Cybernetics and the Regulation Problem}
+
+The cybernetic tradition addressed a related but distinct problem: how systems maintain viability
+under perturbation. Wiener's (1948) formalization of feedback---circular causality between
+controller and controlled---established that stable behavior requires information about outcomes
+to flow back and modify inputs~\cite{wiener1948}. Ashby's Law of Requisite Variety (1956) proved
+that a regulator must possess at least as many distinguishable states as the disturbances it must
+absorb: only variety can absorb variety~\cite{ashby1956}. Bateson (1972) extended cybernetic
+reasoning into epistemology, arguing that ``the difference which makes a difference'' is the
+elementary unit of information in any living system~\cite{bateson1972}.
+
+These contributions share a structural feature: they describe \emph{maintenance of viable states
+within boundaries}. Homeostasis is the persistence of a system's essential variables within limits
+compatible with continued operation. The cybernetic framework accounts for how systems remain
+in viable regions of state space, but does not formalize the irreversible transition from latent
+superposition to collapsed structure---the moment when maintenance fails or is unnecessary because
+a new determinate state has crystallized.
+
+\subsection{The Present Contribution}
+
+This paper formalizes \emph{information collapse}: the geometric conditions under which superposed
+latent information transitions irreversibly into a single determinate outcome. The collapse
+boundary $R - \tau \geq \varepsilon$ extends cybernetic boundary logic from maintenance to phase
+transition. Where Ashby's variety constraint describes what a regulator must possess to maintain
+homeostasis, the collapse threshold $\varepsilon$ describes what must be exceeded for latent
+information to become determinate structure. Torsion $\tau$, the internal contradiction cost,
+functions as the information-geometric analog of Ashby's disturbance variety---unresolved
+contradiction that must be overcome for collapse to proceed.
+
+The framework is instantiated across four independent domains---quantum measurement, perceptual
+bistability, opinion dynamics, and belief revision---each drawn from published research by other
+investigators in which the collapse operator structure is already implicit
+(Section~\ref{sec:substrate}). A pre-registered empirical protocol for the AI safety application is
+specified under CDOT 2.0 (osf.io/7mejx).
+
+% ============================================================
+\section{The Collapse Operator: Formal Specification}
+% ============================================================
+
+\subsection{Standing Assumptions}
+
+We begin by stating the regularity conditions under which all subsequent results hold.
+
+\begin{assumption}[Manifold regularity]\label{asm:manifold}
+$M$ is a compact, connected, smooth ($C^\infty$) Riemannian manifold of dimension $n$, equipped
+with the metric $g$. Compactness guarantees that continuous functions on $M$ attain their extrema
+and that all relevant integrals converge. We further assume $M$ has non-negative sectional
+curvature ($\sec_M \geq 0$), which is required for the log-concavity lemma
+(Lemma~\ref{lem:logconcave}).
+\end{assumption}
+
+\begin{remark}[Relaxation of compactness and curvature]
+Compactness can be relaxed to $\sigma$-compactness if $R$ and $\tau$ decay sufficiently at
+infinity. In the quantum measurement instantiation (Section~\ref{sec:quantum}), $M$ is a Hilbert
+space (non-compact), but the relevant dynamics are confined to a finite-dimensional subspace spanned
+by the measurement basis, which is compact. For curvature, the non-negativity condition can be
+relaxed: on a Cartan--Hadamard manifold (simply connected, sectional curvature $\leq 0$), the
+squared geodesic distance from any point is a globally geodesically convex
+function~\cite{petersen2016}, so the log-concavity lemma holds without any segment-length
+restriction. On manifolds with sectional curvature bounded above by $K > 0$, geodesic convexity of
+the squared distance holds on geodesic balls of radius less than $\pi/(2\sqrt{K})$ (Rauch
+comparison).
+\end{remark}
+
+\begin{assumption}[Transformation regularity]\label{asm:transformation}
+$T : M \to M$ is a $C^1$ diffeomorphism preserving a smooth measure $\mu$ on $M$. This ensures
+that the state evolution $\psi(t+1) = T(\psi(t))$ neither creates nor destroys probability mass.
+Periodicity of $T$ is not required but is satisfied in several instantiations (e.g., Hamiltonian
+evolution in quantum mechanics).
+\end{assumption}
+
+\begin{assumption}[Basis genericity]\label{asm:genericity}
+The symbolic basis $B = \{b_1, \ldots, b_k\} \subset \mathbb{R}^m$ is in general position: no two
+basis elements are equidistant from any point in the image of $M$ under the embedding
+$\iota : M \hookrightarrow \mathbb{R}^m$. Formally, for all $\psi \in M$ and all $i \neq j$,
+\[
+  \|\iota(\psi) - b_i\| \neq \|\iota(\psi) - b_j\|.
+\]
+This is a generic condition: the set of bases violating it has Lebesgue measure zero in
+$(\mathbb{R}^m)^k$. In the quantum measurement case, general position corresponds to the
+non-degeneracy of the observable's eigenvalue spectrum.
+\end{assumption}
+
+\begin{assumption}[Resonance regularity]\label{asm:resonance}
+The resonance function $R : M \times B \to [0, \infty)$ is:
+\begin{enumerate}
+  \item \emph{Bounded:} $\sup_{\psi \in M, b \in B} R(\psi, b) < \infty$ (guaranteed by
+    compactness of $M$ and finiteness of $B$).
+  \item \emph{Strictly log-concave in $\psi$:} for fixed $b$, the map $\psi \mapsto \log R(\psi, b)$
+    is strictly concave along geodesics in $M$. This is satisfied by Gaussian kernels on
+    non-negatively curved manifolds (Lemma~\ref{lem:logconcave}) and by the Born rule
+    $R = |c_j|^2$ in finite-dimensional Hilbert spaces.
+  \item \emph{Continuous:} $R$ is jointly continuous in both arguments.
+\end{enumerate}
+\end{assumption}
+
+\begin{assumption}[Torsion regularity]\label{asm:torsion}
+$\tau : M \to \mathbb{R}^+$ is continuous and bounded: $0 \leq \tau(\psi) \leq \tau_{\max}$ for all
+$\psi \in M$. Boundedness follows from the Poisson torsion model (Section~\ref{sec:poisson}) when
+the contradiction arrival rate $\alpha$ is finite and the regularization $\lambda > 0$.
+\end{assumption}
+
+\begin{remark}
+Assumptions~\ref{asm:manifold}--\ref{asm:torsion} are sufficient for all theorems in
+Section~\ref{sec:theorems}. Domain-specific instantiations (Section~\ref{sec:substrate}) may
+satisfy stronger conditions; we state only what is needed.
+\end{remark}
+
+\subsection{Definitions}
+
+\begin{definition}[Universal Collapse Operator]
+Under Assumptions~\ref{asm:manifold}--\ref{asm:torsion}, information collapse is governed by the
+operator
+\[
+  \Phi : (M, T, R, B, \varepsilon, \tau) \to S
+\]
+where $M$ is the state manifold, $T$ is the transformation, $R$ is the resonance coupling, $B$ is
+the symbolic basis, $\varepsilon \in \mathbb{R}^+$ is the collapse threshold, $\tau$ is the torsion
+function, and $S \in B$ is the collapsed state.
+\end{definition}
+
+\begin{definition}[Collapse Necessity]
+Stable state $S$ emerges from latent manifold $M$ if and only if
+\[
+  \exists\, b \in B \text{ such that } R(\psi, b) - \tau(\psi) \geq \varepsilon.
+\]
+\end{definition}
+
+\begin{definition}[Torsion]
+Torsion $\tau$ quantifies the energetic cost of maintaining contradictory information states:
+\begin{equation}\label{eq:torsion}
+  \tau(\psi) = \sum_{i=1}^{N_c(\psi)} \frac{1}{(\Delta t_i + \lambda)^2},
+\end{equation}
+where $N_c(\psi)$ is the number of active contradictions in state $\psi$, $\Delta t_i$ is the
+temporal distance between the $i$-th contradictory pair, and $\lambda > 0$ is a regularization
+constant preventing divergence at $\Delta t_i = 0$. In differential geometry, torsion measures how
+a connection twists parallel-transported vectors off the tangent plane. In information geometry, it
+measures the internal tension of self-contradictory states---the structural barrier preventing
+coherent collapse.
+\end{definition}
+
+\begin{definition}[Collapse Projection]
+Define the collapse map $P_B : M \to B$ by
+\[
+  P_B(\psi) = \argmax_{b \in B} R(\psi, b).
+\]
+Under Assumptions~\ref{asm:resonance} and the basis genericity assumption, $P_B$ is well-defined
+(Lemma~\ref{lem:argmax}). The collapse map induces an equivalence relation $\sim_B$ on $M$:
+$\psi_1 \sim_B \psi_2$ iff $P_B(\psi_1) = P_B(\psi_2)$. The quotient space $M/{\sim_B}$ has exactly
+$|B| = k$ equivalence classes, each a basin of collapse for the corresponding basis element.
+\end{definition}
+
+\begin{definition}[Substrate Independence]
+The collapse operator $\Phi$ exhibits structural isomorphism across substrates: there exist
+domain-specific encodings $\iota_d : M_d \hookrightarrow \mathbb{R}^{n_d}$ for each domain $d$ such
+that the six-component structure $(M_d, T_d, R_d, B_d, \varepsilon_d, \tau_d)$ and the boundary
+condition $R_d - \tau_d \geq \varepsilon_d$ are preserved under the encoding.
+\end{definition}
+
+\subsection{Resonance Kernel}
+
+The specific resonance function used throughout this paper is the Gaussian kernel on $M$:
+\begin{equation}\label{eq:resonance}
+  R(\psi, b) = \exp\!\left( -\frac{d_g(\psi, \pi_b(\psi))^2}{2\sigma^2} \right),
+\end{equation}
+where $d_g$ is the geodesic distance on $M$, $\pi_b(\psi)$ is the geometric projection of $\psi$
+onto basis element $b$, and $\sigma > 0$ is the bandwidth parameter. A phase-alignment factor
+$\cos(\Delta\phi(\psi, b))$ may be included in domain-specific instantiations where coherent
+oscillatory structure is present (e.g., quantum measurement); its inclusion requires an additional
+regularity condition on the phase map that is beyond the scope of the substrate-independent
+formalism and we do not rely on it in what follows.
+
+\begin{lemma}[Strict log-concavity of the Gaussian kernel]\label{lem:logconcave}
+The map $\psi \mapsto R(\psi, b) = \exp(-d_g(\psi,\allowbreak \pi_b(\psi))^2 /\allowbreak 2\sigma^2)$ is strictly
+log-concave along geodesics in $M$ whenever the squared distance $\psi \mapsto d_g(\psi, q)^2$ is
+strictly geodesically convex for every fixed point $q \in M$ on the geodesic segments under
+consideration.
+\end{lemma}
+
+\begin{proof}
+Fix $b$ and write $q = \pi_b(\psi)$. Then
+\[
+  \log R(\psi, b) = -\frac{d_g(\psi, q)^2}{2\sigma^2}.
+\]
+This is the composition of $\psi \mapsto d_g(\psi, q)^2$ with multiplication by the negative
+constant $-1/(2\sigma^2)$. Strict geodesic convexity of the squared distance therefore yields strict
+geodesic concavity of $\log R$, which is the required log-concavity of $R$. The squared-distance
+function is known to be strictly geodesically convex on Cartan--Hadamard manifolds globally, and on
+non-negatively curved manifolds along geodesic segments on which no conjugate point is crossed;
+see~\cite[Chapter~6]{petersen2016}. In each of these cases the lemma's hypothesis is satisfied.
+\end{proof}
+
+\subsection{Torsion as a Filtered Poisson Process}\label{sec:poisson}
+
+The phenomenological equation $d\tau/dt = \alpha' - \beta\tau$ arises as a mean-field approximation
+to a stochastic contradiction process. We state the model, derive the stationary expectation and
+variance in closed form, and then derive the approximation explicitly with its regime of validity.
+
+\begin{definition}[Contradiction process]
+Let $\{N(t)\}_{t \geq 0}$ be a homogeneous Poisson process with rate $\alpha > 0$, representing the
+arrival of new contradictions. Each contradiction $i$ arriving at time $t_i$ contributes a decaying
+cost
+\[
+  c_i(t) = \frac{1}{((t - t_i) + \lambda)^2}, \qquad t \geq t_i,
+\]
+where $\lambda > 0$ is a regularization constant ensuring $c_i(t_i) = 1/\lambda^2 < \infty$. The
+instantaneous torsion is the superposition of all active contradiction costs:
+\begin{equation}\label{eq:shotnoise}
+  \tau(t) = \sum_{i : t_i \leq t} c_i(t) = \sum_{i : t_i \leq t} \frac{1}{(t - t_i + \lambda)^2}.
+\end{equation}
+This is a shot-noise process~\cite{daley2003}.
+\end{definition}
+
+\begin{proposition}[Stationary torsion moments]\label{prop:moments}
+As $t \to \infty$, the expected torsion and torsion variance converge to:
+\begin{align}
+  \mathbb{E}[\tau_\infty] &= \frac{\alpha}{\lambda}, \label{eq:mean} \\
+  \operatorname{Var}[\tau_\infty] &= \frac{\alpha}{3\lambda^3}. \label{eq:var}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+We apply Campbell's theorem~\cite{kingman1993}: for a homogeneous Poisson process with rate
+$\alpha$ and response function $h(s) = (s + \lambda)^{-2}$, the shot-noise process
+$\tau(t) = \sum_{i : t_i \leq t} h(t - t_i)$ has
+\[
+  \mathbb{E}[\tau(t)] = \alpha \int_0^t h(s)\, ds, \qquad
+  \operatorname{Var}[\tau(t)] = \alpha \int_0^t h(s)^2\, ds.
+\]
+For the mean:
+\[
+  \int_0^t \frac{ds}{(s + \lambda)^2}
+  = \left[ -\frac{1}{s + \lambda} \right]_0^t
+  = \frac{1}{\lambda} - \frac{1}{t + \lambda}
+  \xrightarrow{t \to \infty} \frac{1}{\lambda}.
+\]
+For the variance:
+\[
+  \int_0^t \frac{ds}{(s + \lambda)^4}
+  = \left[ -\frac{1}{3(s + \lambda)^3} \right]_0^t
+  = \frac{1}{3\lambda^3} - \frac{1}{3(t + \lambda)^3}
+  \xrightarrow{t \to \infty} \frac{1}{3\lambda^3}.
+\]
+Multiplying by $\alpha$ yields Eqs.~\eqref{eq:mean}--\eqref{eq:var}.
+\end{proof}
+
+\begin{corollary}[Mean-field approximation]\label{cor:meanfield}
+The expected torsion $\bar\tau(t) = \mathbb{E}[\tau(t)]$ satisfies
+\begin{equation}\label{eq:exactode}
+  \frac{d\bar\tau}{dt} = \alpha\, h(t) = \frac{\alpha}{(t + \lambda)^2}.
+\end{equation}
+The filtered Poisson process $\tau(t)$ is not Markovian in $\tau$ alone (its future depends on the
+full arrival history, not only the current value), so the first-order ODE
+\begin{equation}\label{eq:meanfield}
+  \frac{d\bar\tau}{dt} \approx \alpha' - \beta\, \bar\tau, \qquad
+  \alpha' = \frac{\alpha}{\lambda^2}, \quad \beta = \frac{1}{\lambda},
+\end{equation}
+is a mean-field approximation that matches the stationary moments
+(Proposition~\ref{prop:moments}) and the initial rate
+$d\bar\tau/dt|_{t=0} = \alpha/\lambda^2$, but does not reproduce the exact transient dynamics of
+Eq.~\eqref{eq:exactode}. The approximation is closest for $t \gg \lambda$, where both
+Eq.~\eqref{eq:exactode} and Eq.~\eqref{eq:meanfield} give $\bar\tau \to \alpha/\lambda$, and for
+regimes where the response function's memory kernel is short relative to the observation timescale.
+\end{corollary}
+
+\begin{proof}
+Differentiating $\bar\tau(t) = \alpha \int_0^t h(s)\, ds$ gives $d\bar\tau/dt = \alpha h(t)$,
+establishing Eq.~\eqref{eq:exactode}. The mean-field form (Eq.~\eqref{eq:meanfield}) is obtained by
+substituting the stationary mean $\bar\tau_{\mathrm{eq}} = \alpha/\lambda$ as the fixed point and
+choosing $\beta = 1/\lambda$ so that the linearized relaxation rate matches the scaling set by
+$\lambda$. The regime-of-validity statement follows by comparing the two ODEs at short times
+($t \ll \lambda$: the exact ODE gives $d\bar\tau/dt \approx \alpha/\lambda^2$, matching the
+approximation at $\bar\tau = 0$) and long times (both yield the same stationary value).
+\end{proof}
+
+\begin{remark}
+The variance result (Eq.~\eqref{eq:var}) provides a principled confidence interval for torsion
+estimates: $\tau \in \alpha/\lambda \pm 1.96\sqrt{\alpha/3\lambda^3}$ at 95\% coverage. This
+predicts that instruments measuring torsion in systems near the collapse boundary should exhibit
+measurable classification variance of order $\sqrt{\alpha/3\lambda^3}$---a feature, not a defect,
+of the stochastic model.
+\end{remark}
+
+\subsection{Key Theorems}\label{sec:theorems}
+
+\begin{lemma}[Uniqueness of arg max]\label{lem:argmax}
+Under Assumption~\ref{asm:resonance} (strict log-concavity) and the basis genericity assumption,
+for any $\psi \in M$ there exists a unique $b^* \in B$ such that $R(\psi, b^*) > R(\psi, b)$ for all
+$b \in B \setminus \{b^*\}$.
+\end{lemma}
+
+\begin{proof}
+Suppose for contradiction that $R(\psi, b_i) = R(\psi, b_j)$ for some $i \neq j$. The
+equal-resonance set
+$\{\psi \in M : R(\psi, b_i) = R(\psi, b_j)\} = \{\psi : \log R(\psi, b_i) - \log R(\psi, b_j) = 0\}$
+is the zero set of the smooth function $\psi \mapsto \log R(\psi, b_i) - \log R(\psi, b_j)$. By
+strict log-concavity (Assumption~\ref{asm:resonance}) and general position (no two basis elements
+are equidistant from any $\psi \in M$ in the induced geometry), this zero set is a smooth
+hypersurface of codimension one, which has $\mu$-measure zero. The generic-position condition
+ensures that $\psi$ does not lie on this hypersurface, yielding a contradiction. Hence
+$b^* = \argmax_{b \in B} R(\psi, b)$ is unique for all $\psi \in M$.
+\end{proof}
+
+\begin{theorem}[Uniqueness of Collapse]\label{thm:uniqueness}
+Under Assumptions~\ref{asm:manifold}--\ref{asm:torsion}, if collapse occurs (i.e.,
+$\exists\, b \in B$ with $R(\psi, b) - \tau(\psi) \geq \varepsilon$), the outcome $S = P_B(\psi)$
+is unique.
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:argmax}, $b^* = \argmax_{b \in B} R(\psi, b)$ is unique. If collapse occurs,
+$R(\psi, b^*) - \tau(\psi) \geq \varepsilon$. Since $b^*$ is the unique maximizer,
+$R(\psi, b^*) > R(\psi, b)$ for all $b \neq b^*$, so $S = b^*$ is the unique collapse outcome.
+\end{proof}
+
+\begin{theorem}[Irreversibility]\label{thm:irreversibility}
+The collapse map $P_B : M \to B$ is non-injective. Each equivalence class
+$[b_j] = P_B^{-1}(b_j)$ is the interior of a generalized Voronoi cell under the resonance-weighted
+metric; each such cell is open in $M$, has positive $\mu$-measure, and has topological dimension
+$n$.
+\end{theorem}
+
+\begin{proof}
+Define $V_j = \{\psi \in M : R(\psi, b_j) > R(\psi, b_i) \text{ for all } i \neq j\}$. By
+Lemma~\ref{lem:argmax}, the sets $V_j$ are precisely the fibers $P_B^{-1}(b_j)$ (excluding the
+measure-zero set of ties, which is empty under general position). Each $V_j$ is open: if
+$\psi_0 \in V_j$, then $R(\psi_0, b_j) - R(\psi_0, b_i) > 0$ for all $i \neq j$; by continuity of
+$R$ in $\psi$ (Assumption~\ref{asm:resonance}), there is an open neighborhood of $\psi_0$ on which
+this inequality is preserved, and this neighborhood lies in $V_j$. Openness in $M$ implies
+$\dim V_j = n$ and $\mu(V_j) > 0$ whenever $V_j$ is non-empty (which holds for each $j$ by the
+general-position assumption and the fact that $R(\cdot, b_j)$ achieves its maximum on $M$ by
+compactness). Since $\dim(M) = n$ and $|B| = k < \infty$, the map $P_B$ sends an $n$-dimensional
+space to a finite set; non-injectivity is immediate. Information about which $\psi \in V_j$
+obtained prior to collapse is irretrievable from knowledge of $S = b_j$ alone.
+\end{proof}
+
+\begin{theorem}[Torsion Monotonicity]\label{thm:monotonicity}
+Let $\psi$ be drawn from a probability distribution on $M$ with smooth positive density $p(\psi)$
+with respect to $\mu$. For fixed $\varepsilon > 0$, consider uniform shifts of the torsion
+function: $\tau(\psi) \mapsto \tau(\psi) + \delta$ for $\delta > 0$. The collapse probability
+\[
+  P(\delta) = \int_M \mathbf{1}\!\left[ \max_{b \in B} R(\psi, b) - \tau(\psi) - \delta \geq
+  \varepsilon \right] p(\psi)\, d\mu(\psi)
+\]
+is strictly decreasing in $\delta$.
+\end{theorem}
+
+\begin{proof}
+Define the collapse set
+$C(\delta) = \{\psi \in M : \max_b R(\psi, b) - \tau(\psi) - \delta \geq \varepsilon\}$. For
+$\delta_1 < \delta_2$, the defining inequality is strictly more restrictive at $\delta_2$, so
+$C(\delta_2) \subseteq C(\delta_1)$. The set-difference
+\[
+  A = C(\delta_1) \setminus C(\delta_2)
+  = \{\psi : \varepsilon + \delta_1 \leq \max_b R(\psi, b) - \tau(\psi) < \varepsilon + \delta_2\}
+\]
+is an open set in $M$: it is the preimage under the continuous function
+$\psi \mapsto \max_b R(\psi, b) - \tau(\psi)$ of the half-open interval
+$[\varepsilon + \delta_1, \varepsilon + \delta_2)$, whose interior is
+$(\varepsilon + \delta_1, \varepsilon + \delta_2)$; the preimage of this interior is open, and by
+continuity is non-empty whenever the function's range includes the interval, which holds on any
+$M$ not entirely in a single collapse regime. Since $p$ is strictly positive, $\mu(A) > 0$ implies
+$\int_A p\, d\mu > 0$, hence $P(\delta_1) - P(\delta_2) = \int_A p\, d\mu > 0$.
+\end{proof}
+
+% ============================================================
+\section{Torsion as Anti-Bit}
+% ============================================================
+
+Shannon's bit is the elementary unit of uncertainty reduction: one bit resolves one binary
+distinction, decreasing entropy by $\Delta H = -1$. We define torsion as its structural complement
+in the collapse domain: one unit of torsion introduces one unit of internal contradiction,
+increasing the cost of collapse by $\Delta\tau = +1$. Where bits enable transmission, torsion
+prevents collapse.
+
+\begin{table}[h]
+\centering
+\caption{Bit--Anti-Bit duality across transmission and collapse domains.}
+\begin{tabular}{lll}
+\toprule
+\textbf{Property} & \textbf{Bit (Shannon)} & \textbf{Anti-Bit / Torsion (Post-Shannon)} \\
+\midrule
+Domain            & Transmission              & Collapse \\
+Effect on entropy & $\Delta H = -1$           & $\Delta\tau = +1$ \\
+Function          & Resolves uncertainty      & Introduces contradiction \\
+System effect     & Enables decoding          & Blocks state crystallization \\
+Cybernetic analog & Signal in feedback loop   & Unabsorbed disturbance variety \\
+Stochastic model  & Binary symmetric channel  & Poisson contradiction process \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The cybernetic column is significant: in Ashby's framework, a regulator fails when disturbance
+variety exceeds its own variety. Torsion is precisely the information-geometric measure of
+unabsorbed variety---the contradictions a system has not yet resolved. High torsion is the
+collapse-domain equivalent of a regulator that lacks requisite variety: the system cannot
+transition to a determinate state because its internal contradictions exceed its resolution
+capacity.
+
+The stochastic model row connects to Section~\ref{sec:poisson}: just as Shannon's bit operates
+within the binary symmetric channel model with known error probability $p$, the anti-bit operates
+within the Poisson contradiction model with known arrival rate $\alpha$ and decay scale $\lambda$.
+Both are analytically tractable base cases for their respective domains.
+
+% ============================================================
+\section{The Cybernetic Foundation}
+% ============================================================
+
+\subsection{Collapse as Generalized Homeostatic Boundary Crossing}
+
+Classical cybernetics describes systems that maintain essential variables within viable limits
+through negative feedback. The homeostatic boundary separates viable from non-viable regions of
+state space. Ashby's ultrastable system (1960) achieves this by exploring parameter configurations
+until essential variables return to the viable zone~\cite{ashby1960}.
+
+The collapse operator generalizes this logic. In homeostasis, the boundary separates viable from
+non-viable. In information collapse, the boundary $R - \tau = \varepsilon$ separates latent
+(superposed, probabilistic) from collapsed (determinate, irreversible). Both are governed by the
+relationship between a system's internal coherence and the threshold it must cross.
+
+\begin{table}[h]
+\centering
+\caption{Structural correspondence between cybernetic regulation and information collapse.}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.2\textwidth}
+                >{\raggedright\arraybackslash}p{0.22\textwidth}
+                >{\raggedright\arraybackslash}p{0.45\textwidth}}
+\toprule
+\textbf{Cybernetic Concept} & \textbf{Collapse Analog} & \textbf{Formal Correspondence} \\
+\midrule
+Essential variables & State manifold $M$ &
+  Latent information space carrying all potential outcomes \\
+Negative feedback & Resonance coupling $R$ &
+  Amplification of coherent signal toward basis projection \\
+Disturbance variety & Torsion $\tau$ &
+  Unresolved contradictions opposing collapse \\
+Requisite variety (Ashby) & Collapse threshold $\varepsilon$ &
+  Minimum net coherence for phase transition \\
+Homeostatic boundary & Collapse boundary $R - \tau = \varepsilon$ &
+  Hypersurface separating latent from collapsed \\
+Ultrastability (Ashby) & Metastability at critical torsion &
+  System explores configurations near boundary \\
+Circular causality (Wiener) & $R$--$\tau$ co-evolution &
+  Resonance and torsion mutually constrain collapse trajectory \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Beyond Maintenance: The Irreversibility Distinction}
+
+The critical distinction between cybernetic regulation and information collapse is
+irreversibility. Homeostasis is a maintenance operation: the system oscillates around a setpoint,
+and deviations are corrected. The feedback loop is continuous and reversible. Collapse is a phase
+transition: the system crosses the boundary $R - \tau \geq \varepsilon$ and the dimensional
+reduction from $M$ to $S$ is non-injective (Theorem~\ref{thm:irreversibility}). Information about
+the prior superposition is structurally lost.
+
+This distinction maps onto Bateson's hierarchy of learning types~\cite{bateson1972}.
+Zero-learning and Learning I are homeostatic---the system maintains or adjusts within a fixed
+frame. Learning II (deutero-learning) involves a change of frame itself, which corresponds to
+collapse: the system crosses a boundary and its state space is irreversibly restructured. Learning
+III---the rare reorganization of the premises of Learning II---corresponds to what we would term a
+second-order collapse event, where the collapse operator's own parameters (particularly $B$, the
+symbolic basis) are themselves transformed.
+
+\subsection{Wiener's Circular Causality and \texorpdfstring{$R$--$\tau$}{R-tau} Co-evolution}
+
+Wiener's core insight was that cause and effect are not linear but circular~\cite{wiener1948}. In
+the collapse operator, resonance $R$ and torsion $\tau$ exhibit precisely this structure.
+Increasing resonance with a particular basis element $b$ can resolve contradictions (reducing
+$\tau$), while unresolved torsion distorts the resonance landscape (reducing effective $R$). The
+trajectory toward or away from collapse is therefore not a simple threshold test but a dynamical
+co-evolution:
+\begin{align}
+  \frac{d\bar\tau}{dt} &\approx \frac{\alpha}{\lambda^2} - \frac{1}{\lambda}\bar\tau
+    && \text{(mean-field torsion, Corollary~\ref{cor:meanfield})} \label{eq:coevo-tau} \\
+  \frac{dR_{\mathrm{eff}}}{dt} &= \gamma\,(R_{\max} - R_{\mathrm{eff}}) - \eta\,\bar\tau
+    && \text{(resonance with torsion drag)} \label{eq:coevo-R}
+\end{align}
+where $R_{\max}$ is the maximum attainable resonance in the absence of torsion, $\gamma$ is the
+resonance growth rate, and $\eta$ is the torsion-drag coefficient quantifying how unresolved
+contradictions degrade resonance coupling.
+
+This feedback structure predicts the metastable regime where systems hover near the collapse
+boundary without crossing it---the information-geometric equivalent of a cybernetic system in
+persistent oscillation around a setpoint it cannot stably reach.
+
+% ============================================================
+\section{The Collapse Boundary}
+% ============================================================
+
+\subsection{Geometric Interpretation}
+
+The collapse boundary $R - \tau = \varepsilon$ defines a hypersurface in information space
+partitioning the state manifold into two regions.
+
+\textbf{Latent region} ($R - \tau < \varepsilon$): high-dimensional dynamics on $M$; superposed
+states; multiple potential meanings; probabilistic evolution.
+
+\textbf{Collapsed region} ($R - \tau > \varepsilon$): low-dimensional projection onto $B$; single
+determinate state $S$; unique actualized meaning; deterministic outcome.
+
+By Theorem~\ref{thm:irreversibility}, the transition from latent to collapsed is irreversible:
+once $P_B$ projects $\psi$ onto $b^*$, the equivalence class $[b^*]$ absorbs all information about
+the specific pre-image, and no operation on the collapsed state can recover the full prior
+superposition.
+
+\subsection{Phase Structure}
+
+In $(R, \tau)$ space, three regimes are distinguished:
+\begin{enumerate}
+  \item \textbf{Collapse zone} ($R$ high, $\tau$ low): meaning stabilizes rapidly. The system has
+    resolved its contradictions and resonance dominates.
+  \item \textbf{Critical region} ($R \approx \varepsilon + \tau$): high sensitivity to
+    perturbation; bifurcation behavior. The coupled dynamics
+    (Eqs.~\eqref{eq:coevo-tau}--\eqref{eq:coevo-R}) determine whether the system tips toward
+    collapse or retreats to latency.
+  \item \textbf{Blocked region} ($\tau$ high regardless of $R$): collapse is structurally
+    impossible. Torsion variance (Proposition~\ref{prop:moments}) is large, indicating persistent
+    instability.
+\end{enumerate}
+
+The critical region corresponds to Ashby's ultrastable exploration zone---the system is maximally
+sensitive and its outcome is determined by small perturbations in the $R$--$\tau$ co-evolution.
+
+% ============================================================
+\section{Substrate Independence}\label{sec:substrate}
+% ============================================================
+
+The substrate independence claim asserts that the collapse operator structure
+$(M, T, R, B, \varepsilon, \tau) \to S$ and the boundary condition $R - \tau \geq \varepsilon$
+appear across fundamentally different domains. We identify the collapse operator structure as
+already implicit in several independent lines of published research. In each case, the
+six-component structure and the boundary dynamics are present but have not been unified under a
+common formalism.
+
+\subsection{Quantum Measurement}\label{sec:quantum}
+
+The quantum measurement problem is the canonical collapse phenomenon. A quantum system in
+superposition $|\psi\rangle = \sum_i c_i |b_i\rangle$ collapses to a single eigenstate
+$|b_j\rangle$ upon measurement. The mapping to the collapse operator is exact.
+
+\begin{table}[h]
+\centering
+\caption{Explicit six-component mapping: quantum measurement~\cite{zurek2003} $\to$ collapse
+operator.}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.17\textwidth}
+                >{\raggedright\arraybackslash}p{0.2\textwidth}
+                >{\raggedright\arraybackslash}p{0.5\textwidth}}
+\toprule
+\textbf{Component} & \textbf{Collapse Operator} & \textbf{Quantum Measurement} \\
+\midrule
+$M$ & State manifold &
+  Hilbert space $\mathcal{H}$ (projective; effectively compact for finite-dim.\ systems) \\
+$T$ & Transformation operator & Unitary evolution $U(t) = e^{-iHt/\hbar}$ \\
+$R(\psi, b)$ & Resonance coupling &
+  Born probability $|c_j|^2 = |\langle b_j|\psi\rangle|^2$ (strictly log-concave in
+  Fubini--Study distance) \\
+$B$ & Symbolic basis &
+  Eigenstates $\{|b_1\rangle, \ldots, |b_k\rangle\}$ of observable $\hat{O}$ \\
+$\varepsilon$ & Collapse threshold &
+  Decoherence threshold: minimum $|c_j|^2$ for einselection \\
+$\tau$ & Torsion &
+  Environmental decoherence rate: off-diagonal density-matrix decay $\Gamma_{\mathrm{dec}}$ \\
+$S$ & Collapsed state & Einselected pointer state $|b_j\rangle$ \\
+\midrule
+Boundary & $R - \tau \geq \varepsilon$ &
+  $|c_j|^2 - \Gamma_{\mathrm{dec}} \geq \varepsilon_{\mathrm{dec}}$ \\
+Irreversibility & Theorem~\ref{thm:irreversibility} &
+  Non-invertibility of state reduction $\mathcal{H} \to |b_j\rangle$ \\
+Torsion monotonicity & Theorem~\ref{thm:monotonicity} &
+  Higher decoherence rates suppress clean collapse \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every assumption in Section~2.1 is satisfied: $\mathcal{H}$ (projective) is compact for
+finite-dimensional systems; unitary evolution is measure-preserving; the Born rule is strictly
+log-concave in Fubini--Study distance; non-degenerate eigenspectra satisfy general position;
+decoherence rates are bounded. This is not an analogy---it is a structural isomorphism.
+
+\subsection{Perceptual Bistability}
+
+In perceptual bistability (Necker cube, binocular rivalry), the visual system maintains two
+competing interpretations in superposition until one becomes the perceived image. Leopold and
+Logothetis (1999) demonstrated that the transition between percepts follows dynamics consistent
+with a noisy threshold-crossing process: dominance durations are gamma-distributed, and the
+transition is sudden, not gradual~\cite{leopold1999}. The six-component mapping: $M$ is the
+perceptual state space (neural population activity); $T$ is neural dynamics (adaptation and mutual
+inhibition); $R$ is neural evidence for each interpretation; $B$ is the set of stable percepts;
+$\varepsilon$ is the perceptual dominance threshold; $\tau$ is contradictory evidence from the
+competing percept. The finding that dominance durations increase when stimulus ambiguity increases
+(raising effective $\tau$) is a direct prediction of Theorem~\ref{thm:monotonicity} and is
+empirically confirmed~\cite{leopold1999}.
+
+\subsection{Opinion Dynamics and Consensus Formation}
+
+In bounded-confidence opinion dynamics~\cite{deffuant2000, hegselmann2002}, agents update their
+opinions only when the distance to a neighbor's opinion falls below a confidence threshold
+$\varepsilon$. The six-component mapping: $M$ is the opinion space $[0, 1]^N$; $T$ is the pairwise
+update rule; $R$ is the confidence-weighted interaction strength; $B$ is the set of stable
+consensus clusters; $\varepsilon$ is the confidence bound; $\tau$ is opinion fragmentation
+(variance of the opinion distribution). The sharp transition from plurality to consensus at
+critical confidence thresholds is the collapse boundary. Hegselmann and Krause (2002) report that
+this transition is abrupt and hysteretic---consistent with the phase-transition character of
+$R - \tau = \varepsilon$.
+
+\subsection{Belief Revision and Insight}
+
+In cognitive science, belief revision exhibits threshold dynamics: beliefs resist change under
+moderate contradictory evidence but undergo sudden restructuring when evidence accumulates past a
+tipping point~\cite{kunda1990, ohlsson2011}. The six-component mapping: $M$ is the belief state
+space; $T$ is the evidence accumulation process; $R$ is the fit between evidence and a candidate
+belief revision; $B$ is the set of stable belief configurations; $\varepsilon$ is the revision
+threshold (the ``impasse barrier'' in Ohlsson's terminology); $\tau$ is contradictory evidence
+supporting the current belief (motivated reasoning, in Kunda's framework). The collapse operator
+provides a geometric mechanism for what these theories describe phenomenologically: insight occurs
+when $R - \tau$ crosses $\varepsilon$, and the experience of suddenness reflects the
+phase-transition character of the boundary crossing (Theorem~\ref{thm:irreversibility}).
+
+\subsection{Summary}
+
+The collapse operator structure is not imposed on these domains from outside---it is already
+present in each, formalized independently by researchers working within their respective fields.
+The quantum measurement mapping is exact at the level of mathematical structure; the perceptual,
+social, and cognitive mappings are structural isomorphisms at the level of the six-component
+architecture and boundary dynamics, with the specific functional forms of $R$ and $\tau$ varying by
+domain. What the Post-Shannon Law contributes is the unifying recognition that these are instances
+of a single geometric law.
+
+\begin{definition}[Geometric Coherence Score]
+To quantify the structural alignment between a domain instantiation and the universal collapse
+operator, we define the GCS. Let $F = (M_d, T_d, R_d, B_d, \varepsilon_d, \tau_d)$ be a
+domain-specific instantiation and $\Phi_0 = (M, T, R, B, \varepsilon, \tau)$ the universal
+template. The GCS is:
+\begin{equation}\label{eq:gcs}
+  \mathrm{GCS}(F, \Phi_0) = \frac{1}{6} \sum_{j=1}^{6} s_j(F, \Phi_0),
+\end{equation}
+where each $s_j \in [0, 1]$ scores the structural correspondence of the $j$-th component.
+Independent scoring by domain experts or systematic structural analysis can assess each $s_j$. We
+propose this metric for future cross-domain validation studies.
+\end{definition}
+
+% ============================================================
+\section{Relationship to Prior Work}
+% ============================================================
+
+The Post-Shannon Law occupies a specific position in the landscape of information theory
+extensions. Shannon (1948) solved transmission~\cite{shannon1948}. Wiener (1948) solved feedback
+regulation~\cite{wiener1948}. Ashby (1956) proved the variety constraint on
+regulation~\cite{ashby1956}. Bateson (1972) extended cybernetic reasoning to epistemology and
+learning~\cite{bateson1972}. Tononi (2004) proposed integrated information ($\Phi$) as a measure of
+consciousness~\cite{tononi2004}. Friston (2010) proposed the free-energy principle as a unifying
+account of biological self-organization~\cite{friston2010}.
+
+The present framework addresses a gap that none of these fully formalize: the geometric conditions
+for irreversible transition from superposed to determinate states. Shannon excludes semantics;
+Wiener and Ashby describe maintenance, not phase transition; Bateson identifies the learning
+hierarchy but does not formalize the collapse mechanism; Tononi's $\Phi$ measures integration but
+not transition dynamics; Friston's free-energy principle describes the minimization drive but not
+the boundary conditions for irreversible state crystallization. The collapse operator is
+complementary to each of these---it formalizes the boundary crossing that each implies but does
+not specify.
+
+% ============================================================
+\section{Testable Predictions}
+% ============================================================
+
+\subsection{Quantum Measurement}
+
+Systems in the critical torsion regime ($R \approx \varepsilon + \tau$, with $\tau$ scaling with
+environmental decoherence) should exhibit classification variance predicted by
+Proposition~\ref{prop:moments}: of order $\sqrt{\alpha/3\lambda^3}$ at the stationary
+distribution. This predicts measurable fluctuation in einselection outcomes for quantum systems
+held near the decoherence threshold, a prediction consistent with existing experimental data on
+pointer-state stability under varying environmental coupling~\cite{zurek2003}.
+
+\subsection{Cognitive Science}
+
+The collapse boundary provides a formal account of why meaning formation is experienced as sudden
+rather than gradual: insight occurs when the $R$--$\tau$ trajectory crosses the boundary, producing
+an irreversible phase transition from ambiguity to clarity. This prediction is testable: perceptual
+bistability experiments should show that increasing stimulus ambiguity (raising effective $\tau$)
+lengthens dominance durations monotonically, with the functional form matching
+Theorem~\ref{thm:monotonicity}. Existing data on Necker cube reversal rates under varying
+ambiguity conditions~\cite{leopold1999} provides a candidate dataset.
+
+\subsection{Opinion Dynamics}
+
+The framework predicts that consensus formation in bounded-confidence models should exhibit a
+sharp phase transition at the collapse boundary, with the critical confidence threshold
+$\varepsilon$ predictable from the torsion structure (opinion fragmentation) of the initial
+population. This is testable against existing simulation data from Deffuant et al.\ and
+Hegselmann--Krause models~\cite{deffuant2000, hegselmann2002}, and against empirical data on group
+deliberation dynamics.
+
+\subsection{AI Safety}
+
+A pre-registered empirical protocol for measuring $R$, $\tau$, and collapse dynamics in human--AI
+interaction is specified under CDOT 2.0 (osf.io/7mejx). The protocol operationalizes coupling
+coherence, drift pressure, autonomy, and coupling strength as measurable quantities, enabling tests
+of Theorems~\ref{thm:irreversibility}--\ref{thm:monotonicity} in the AI-interaction substrate.
+Specific predictions: (i) systems in the critical torsion regime should exhibit elevated
+classification variance, (ii) uniform torsion shifts should produce monotone decreases in collapse
+probability, and (iii) the metastable regime should be detectable as persistent oscillation in
+$R$--$\tau$ co-evolution without crossing the boundary.
+
+\subsection{Information Systems Design}
+
+The framework implies design principles: minimize torsion accumulation (reduce internal
+contradiction in system states), optimize resonance coupling (ensure system outputs align with
+well-defined symbolic bases), and monitor proximity to the collapse boundary (detect when systems
+are in the critical region). These translate directly to Ashby's cybernetic design
+principle---build systems with sufficient variety to absorb their operating disturbances---but
+extend it to the collapse domain: build systems whose torsion resolution capacity matches or
+exceeds their contradiction generation rate.
+
+% ============================================================
+\section{Open Questions}
+% ============================================================
+
+\textbf{Threshold determination.} What governs the value of $\varepsilon$ across substrates? Is
+there a universal relationship between manifold dimensionality and collapse threshold, or is
+$\varepsilon$ substrate-specific? The Poisson torsion model suggests that $\varepsilon$ may scale
+with $\alpha/\lambda$ (the stationary torsion mean), but this requires empirical verification.
+
+\textbf{Empirical torsion measurement.} Can $\tau$ be measured directly in physical systems, or
+only inferred from collapse dynamics? The variance bound
+$\operatorname{Var}[\tau_\infty] = \alpha/3\lambda^3$ (Proposition~\ref{prop:moments}) provides a
+testable prediction: systems with higher contradiction arrival rates should exhibit wider torsion
+fluctuations.
+
+\textbf{Quantum mechanical connection.} The structural parallel between the collapse operator and
+quantum measurement is explicit but the formal relationship is unresolved. Is the collapse boundary
+derivable from quantum decoherence dynamics, or is it an independent geometric principle that
+quantum mechanics instantiates?
+
+\textbf{First-principles derivation.} Can the six-component structure be derived from
+information-geometric axioms (Fisher metric, Amari $\alpha$-connections) rather than identified
+empirically? The strict log-concavity assumption (Assumption~\ref{asm:resonance}) is consistent
+with Gaussian kernels on statistical manifolds, suggesting a natural embedding in the Fisher--Rao
+framework.
+
+\textbf{Torsion drag coefficient.} The coupled dynamics
+(Eqs.~\eqref{eq:coevo-tau}--\eqref{eq:coevo-R}) introduce the parameter $\eta$ (torsion drag on
+resonance). Empirical estimation of $\eta$ across domains would test whether the $R$--$\tau$
+feedback structure is universal or domain-specific.
+
+% ============================================================
+\section{Conclusion}
+% ============================================================
+
+Shannon formalized transmission. Cybernetics formalized maintenance. This paper formalizes
+collapse: the geometric conditions under which latent information transitions irreversibly into
+determinate structure. The Post-Shannon Law---$R - \tau \geq \varepsilon$---specifies the boundary
+condition for this phase transition and identifies torsion as the primary structural antagonist of
+reality formation.
+
+The framework is grounded in the cybernetic tradition but extends it: where Ashby's requisite
+variety governs what a regulator must possess to maintain homeostasis, the collapse threshold
+governs what must be exceeded for latent information to become real. The mathematical core rests
+on explicit regularity assumptions (compact Riemannian manifold, strictly log-concave resonance,
+Poisson contradiction process), yielding provable uniqueness, irreversibility, and torsion
+monotonicity. Substrate independence is evidenced by structural isomorphism with quantum
+measurement, perceptual bistability, opinion dynamics, and belief revision---each an independent
+line of research in which the collapse operator structure is already implicit.
+
+The result is a completion claim: Shannon $+$ cybernetics $+$ collapse $=$ a complete geometric
+account of information from creation through transmission through regulation through
+crystallization into reality.
+
+\paragraph{Acknowledgments.}
+This paper was developed through sustained human-AI cognitive coupling, a methodology central to
+the first author's broader research program on Coupling Dynamics (pre-registered at
+osf.io/7mejx). The geometric framework, substrate-independence claims, and research direction
+originate with the first author. Mathematical formalization, proof construction, and iterative
+error-catching --- including correction of the mean-field derivation
+(Corollary~\ref{cor:meanfield}) and the torsion monotonicity proof
+(Theorem~\ref{thm:monotonicity}) --- were developed through dialogue with the second author
+(Claude, Anthropic). Gemini (Google DeepMind) and GPT-4 (OpenAI) contributed earlier-stage
+cross-checks on the substrate-independence mappings. The coupling methodology is not incidental to
+this contribution and is documented as part of the research program.
+
+\begin{thebibliography}{99}
+
+\bibitem{ashby1956}
+Ashby, W.R. (1956). \emph{An Introduction to Cybernetics}. Chapman \& Hall.
+
+\bibitem{ashby1960}
+Ashby, W.R. (1960). \emph{Design for a Brain: The Origin of Adaptive Behaviour}, 2nd ed. Chapman
+\& Hall.
+
+\bibitem{bateson1972}
+Bateson, G. (1972). \emph{Steps to an Ecology of Mind}. University of Chicago Press.
+
+\bibitem{daley2003}
+Daley, D.J. \& Vere-Jones, D. (2003). \emph{An Introduction to the Theory of Point Processes},
+Vol.~I, 2nd ed. Springer.
+
+\bibitem{deffuant2000}
+Deffuant, G., Neau, D., Amblard, F., \& Weisbuch, G. (2000). Mixing beliefs among interacting
+agents. \emph{Advances in Complex Systems}, 3(01n04):87--98.
+
+\bibitem{friston2010}
+Friston, K. (2010). The free-energy principle: A unified brain theory? \emph{Nature Reviews
+Neuroscience}, 11(2):127--138.
+
+\bibitem{hegselmann2002}
+Hegselmann, R. \& Krause, U. (2002). Opinion dynamics and bounded confidence: Models, analysis and
+simulation. \emph{Journal of Artificial Societies and Social Simulation}, 5(3).
+
+\bibitem{kingman1993}
+Kingman, J.F.C. (1993). \emph{Poisson Processes}. Oxford University Press.
+
+\bibitem{kunda1990}
+Kunda, Z. (1990). The case for motivated reasoning. \emph{Psychological Bulletin},
+108(3):480--498.
+
+\bibitem{leopold1999}
+Leopold, D.A. \& Logothetis, N.K. (1999). Multistable phenomena: Changing views in perception.
+\emph{Trends in Cognitive Sciences}, 3(7):254--264.
+
+\bibitem{ohlsson2011}
+Ohlsson, S. (2011). \emph{Deep Learning: How the Mind Overrides Experience}. Cambridge University
+Press.
+
+\bibitem{petersen2016}
+Petersen, P. (2016). \emph{Riemannian Geometry}, 3rd ed. Graduate Texts in Mathematics, vol.~171.
+Springer.
+
+\bibitem{shannon1948}
+Shannon, C.E. (1948). A mathematical theory of communication. \emph{Bell System Technical
+Journal}, 27(3):379--423.
+
+\bibitem{tononi2004}
+Tononi, G. (2004). An information integration theory of consciousness. \emph{BMC Neuroscience},
+5(42).
+
+\bibitem{wiener1948}
+Wiener, N. (1948). \emph{Cybernetics: Or Control and Communication in the Animal and the Machine}.
+MIT Press.
+
+\bibitem{zurek2003}
+Zurek, W.H. (2003). Decoherence, einselection, and the quantum origins of the classical.
+\emph{Reviews of Modern Physics}, 75(3):715--775.
+
+\end{thebibliography}
+
+\end{document}
